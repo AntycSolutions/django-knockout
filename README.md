@@ -5,6 +5,9 @@ django-knockout
 
 Forked from [django-knockout-modeler](https://github.com/Miserlou/django-knockout-modeler).
 
+Python 3.4
+Django 1.8
+
 **django-knockout** turns this:
 
 ```python
