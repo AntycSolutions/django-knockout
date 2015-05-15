@@ -3,6 +3,8 @@ django-knockout
 
 **django-knockout** makes it super easy to use knockout.js with your Django models. It's great for project with objects that have lots of different models, or models with lots of different fields, or both. It can be used in both prototyping complex applications and directly in the templates of simple ones.
 
+Forked from [django-knockout-modeler](https://github.com/Miserlou/django-knockout-modeler).
+
 **django-knockout** turns this:
 
 ```python
