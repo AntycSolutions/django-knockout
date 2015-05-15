@@ -1,4 +1,18 @@
-*.log
-*.pot
+# Sqlite databases
+db.sqlite3
+
+# Python
+__pycache__
 *.pyc
-local_settings.py
+.project
+.pydevproject
+
+# Temporary files
+*~
+
+# Apple
+.DS_Store
+
+# Django
+media/*
+static/*
