@@ -1,2 +1,2 @@
 include README.md LICENSE
-recursive-include knockout_modeler *.py *.html
+recursive-include knockout *.py *.html
