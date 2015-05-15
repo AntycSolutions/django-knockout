@@ -1,11 +1,9 @@
-![Django knockout!](http://i.imgur.com/Nf7Vxq6.gif)
-
-django-knockout-modeler
+django-knockout
 ==============
 
-**django-knockout-modeler** makes it super easy to use knockout.js with your Django models. It's great for project with objects that have lots of different models, or models with lots of different fields, or both. It can be used in both prototyping complex applications and directly in the templates of simple ones.
+**django-knockout** makes it super easy to use knockout.js with your Django models. It's great for project with objects that have lots of different models, or models with lots of different fields, or both. It can be used in both prototyping complex applications and directly in the templates of simple ones.
 
-**django-knockout-modeler** turns this:
+**django-knockout** turns this:
 
 ```python
 class MyObject(models.Model):
@@ -62,25 +60,25 @@ with just this!
 Quick start
 ------------
 
-0. Install django-knockout-modeler
+0. Install django-knockout // TODO
 
     ```python
     pip install django-knockout-modeler
     ```
 
-1. Add 'knockout-modeler' to your INSTALLED_APPS setting like this:
+1. Add 'knockout' to your INSTALLED_APPS setting like this: // TODO
 
     ```python
     INSTALLED_APPS = (
       ...
-      'knockout_modeler',
+      'knockout',
     )
     ```
 
-2. Include Knockout.js in your HTML:
+2. Include knockout.js in your HTML:
 
     ```html
-    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js'></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js'></script>
     ```
 
 4. Knockout your QuerySet:
@@ -114,7 +112,7 @@ Quick start
 Simple Usage
 ---------
 
-**django-knockout-modeler** can be used directly in templates to generate knockout models and knockout-ready data, or either one you choose. To put a QuerySet directly into a django template as a Knockout object, you can do this:
+**django-knockout** can be used directly in templates to generate knockout models and knockout-ready data, or either one you choose. To put a QuerySet directly into a django template as a Knockout object, you can do this:
 
 ```django
 {{ myObjects | knockout }}
@@ -144,7 +142,7 @@ Progammatic Usage
 First, import it!
 
 ```python
-from knockout_modeler.ko import ko, koData, koModel
+from knockout.ko import ko, koData, koModel
 ```
 
 To get the whole template, you can do this:
