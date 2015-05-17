@@ -1,25 +1,37 @@
-function {{modelName}}(data) {{% for fieldName in fields %}
-    {{fieldName}} = ko.observable(){% if not forloop.last %},{%endif%}{% endfor %}
+
+var {{ model_name }} = function(data) {
+	var self = this;
+	{% for field in fields %}
+	self.{{ field }} = ko.observable(data.{{ field }});{% endfor %}
 }
 
-function {{modelName}}ViewModel() { 
+var {{ view_model_string }} = function({{ model_args }}) {
     var self = this;
-    self.{{modelName|lower}}s = ko.observableArray({%if data%}{{modelName}}Data{%else%}[]{%endif%});
 
-	self.add{{modelName}} = function({{modelName|lower}}) {
-		self.{{modelName|lower}}s.push({{modelName|lower}});
+    self.{{ model_args }} = ko.observableArray(ko.utils.arrayMap(
+		{{ model_args }},
+		function({{ model_arg }}) {
+			return new {{ model_name }}({{ model_arg }});
+		}
+	));
+
+	self.add{{ model_name }} = function({{ model_arg }}) {
+		self.{{ model_args }}.push(new {{ model_name }}({{ model_arg }}));
 	};
-	self.remove{{modelName}} = function({{modelName|lower}}){
-		self.{{modelName|lower}}s.remove({{modelName|lower}})
+
+	self.remove{{ model_name }} = function({{ model_arg }}) {
+		self.{{ model_args }}.remove({{ model_arg }})
 	};
-	self.sort{{modelName}}sAsc = function(){
-		self.{{modelName|lower}}s(self.{{modelName|lower}}s().sort(function(a, b) {
-			return a.{{comparator}}>b.{{comparator}}?-1:a.{{comparator}}<b.{{comparator}}?1:0;
+
+	self.sort{{ model_name }}sAsc = function() {
+		self.{{ model_args }}(self.{{ model_args }}().sort(function(a, b) {
+			return a.{{ comparator }}()>b.{{ comparator }}()?-1:a.{{ comparator }}()<b.{{ comparator }}()?1:0;
 		 }));
 	};
-	self.sort{{modelName}}sDesc = function(){
-		self.{{modelName|lower}}s(self.{{modelName|lower}}s().sort(function(a, b) {
-			return a.{{comparator}}<b.{{comparator}}?-1:a.{{comparator}}>b.{{comparator}}?1:0;
+
+	self.sort{{ model_name }}sDesc = function() {
+		self.{{ model_args }}(self.{{ model_args }}().sort(function(a, b) {
+			return a.{{ comparator }}()<b.{{ comparator }}()?-1:a.{{ comparator }}()>b.{{ comparator }}()?1:0;
 		}));
 	};
 }
