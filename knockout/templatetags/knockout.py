@@ -1,63 +1,55 @@
-from django import template
-import simplejson as json
-import datetime
-from knockout_modeler.ko import ko, koData, koModel, koBindings, get_fields
+from knockout import ko
 
+from django.db.models.query import QuerySet
+from django import template
 register = template.Library()
 
+
+@register.filter
 def knockout(values):
-    """
-    Knockoutify a QuerySet!
-    """
+    if isinstance(values, (QuerySet, list)):
+        queryset = values
+        model = values[0]
+    else:
+        queryset = [values]
+        model = values
 
-    if not values:
-        return ''
-        
-    field_names = get_fields(values[0])
-    return ko(values, field_names)
+    fields = ko.get_fields(model)
 
-def knockout_data(values, args=None):
-    """
+    return ko.ko(model, queryset, fields)
 
-    """
-    if not values:
-        return ''
 
-    name = None
-    safe = False
+@register.filter
+def knockout_data(values):
+    if isinstance(values, (QuerySet, list)):
+        queryset = values
+        model = values[0]
+    else:
+        queryset = [values]
+        model = values
 
-    if args:
-        arg_list = [arg.strip() for arg in args.split(',')]
-        if len(arg_list) > 1:
-            safe = True
-        else:
-            safe = False
-        name = arg_list[0]
+    fields = ko.get_fields(model)
 
-    field_names = get_fields(values[0])
-    return koData(values, field_names, name, safe)
+    return ko.ko_data(model, queryset, fields)
 
+
+@register.filter
 def knockout_model(values):
-    """
+    if isinstance(values, (QuerySet, list)):
+        model = values[0]
+    else:
+        model = values
 
-    """
-    if not values:
-        return ''
+    fields = ko.get_fields(model)
 
-    modelClass = values[0].__class__
-    field_names = get_fields(values[0])
-    return koModel(modelClass, field_names)
+    return ko.ko_model(model, fields)
 
+
+@register.filter
 def knockout_bindings(values):
-    """
+    if isinstance(values, (QuerySet, list)):
+        model = values[0]
+    else:
+        model = values
 
-    """
-    if not values:
-        return ''
-
-    return koBindings(values[0])
-
-register.filter(knockout)
-register.filter(knockout_data)
-register.filter(knockout_model)
-register.filter(knockout_bindings)
+    return ko.ko_bindings(model)
