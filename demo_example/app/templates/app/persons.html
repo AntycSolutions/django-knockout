@@ -1,0 +1,62 @@
+{% load knockout %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js'></script>
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.min.js'></script>
+</head>
+<body>
+
+<h1>Django</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for person in persons %}
+        <tr>
+            <td>{{ person.id }}</td>
+            <td>{{ person.first_name }}</td>
+            <td>{{ person.last_name }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h1>Knockout</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Remove</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: persons">
+        <tr>
+            <td><input data-bind="value: id" /></td>
+            <td><input data-bind='value: first_name, valueUpdate: "afterkeydown"' /></td>
+            <td><input data-bind="value: last_name" /></td>
+            <td><input data-bind="value: first_name" /></td>
+            <td><input data-bind="value: last_name" /></td>
+            <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
+        </tr>
+    </tbody>
+</table>
+<p>Count: <span data-bind='text: persons().length'></span>
+<button data-bind='click: addPerson'>Add a Person</button>
+<button data-bind='click: sortPersonsAsc'>Sort Asc</button>
+<button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+<script>
+    {{ persons|knockout }}
+</script>
+
+</body>
+</html>

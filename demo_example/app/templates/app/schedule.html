@@ -1,0 +1,61 @@
+{% load knockout %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js'></script>
+</head>
+<body>
+
+<h1>Django</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Day</th>
+            <th>Tasks</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in schedule %}
+        <tr>
+            <td>{{ task.id }}</td>
+            <td>{{ task.day.day }}</td>
+            <td>{{ task.task }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h1>Knockout</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Task</th>
+            <th>Day</th>
+            <th>Task</th>
+            <th>Day</th>
+            <th>Remove</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: tasks">
+        <tr>
+            <td><input data-bind="value: id" /></td>
+            <td><input data-bind='value: task, valueUpdate: "afterkeydown"' /></td>
+            <td><input data-bind="value: day" /></td>
+            <td><input data-bind="value: task" /></td>
+            <td><input data-bind="value: day" /></td>
+            <td><button data-bind='click: $root.removeTask'>Remove a Task</button></td>
+        </tr>
+    </tbody>
+</table>
+<p>Count: <span data-bind='text: tasks().length'></span>
+<button data-bind='click: addTask'>Add a Task</button>
+<button data-bind='click: sortTasksAsc'>Sort Asc</button>
+<button data-bind='click: sortTasksDesc'>Sort Desc</button>
+<script>
+    {{ schedule|knockout }}
+</script>
+
+</body>
+</html>
