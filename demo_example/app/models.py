@@ -10,6 +10,25 @@ class Day(models.Model):
     day = models.DateField("Day")
 
 
+class ReminderType(models.Model):
+    reminder_type = models.CharField("Reminder", max_length=32)
+
+
+class Reminder(models.Model):
+    reminder = models.CharField("Reminder", max_length=32)
+    reminder_type = models.ForeignKey(ReminderType)
+
+
 class Task(models.Model):
     task = models.TextField("Task")
     day = models.ForeignKey(Day)
+    reminder = models.ForeignKey(Reminder, blank=True, null=True)
+
+
+class Item(models.Model):
+    name = models.CharField("Name", max_length=64)
+
+
+class Shopping(models.Model):
+    name = models.CharField("Name", max_length=32)
+    items = models.ManyToManyField(Item)
