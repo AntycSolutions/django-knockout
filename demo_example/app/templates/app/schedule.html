@@ -11,48 +11,58 @@
 <table>
     <thead>
         <tr>
-            <th>ID</th>
+            <th>Task ID</th>
+            <th>Task</th>
             <th>Day</th>
-            <th>Tasks</th>
+            <th>Reminder</th>
+            <th>Reminder Type</th>
         </tr>
     </thead>
     <tbody>
         {% for task in schedule %}
         <tr>
             <td>{{ task.id }}</td>
-            <td>{{ task.day.day }}</td>
             <td>{{ task.task }}</td>
+            <td>{{ task.day.day }}</td>
+            <td>{{ task.reminder.reminder }}</td>
+            <td>{{ task.reminder.reminder_type.reminder_type }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 <h1>Knockout</h1>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Task</th>
-            <th>Day</th>
-            <th>Task</th>
-            <th>Day</th>
-            <th>Remove</th>
-        </tr>
-    </thead>
-    <tbody data-bind="foreach: tasks">
-        <tr>
-            <td><input data-bind="value: id" /></td>
-            <td><input data-bind='value: task, valueUpdate: "afterkeydown"' /></td>
-            <td><input data-bind="value: day" /></td>
-            <td><input data-bind="value: task" /></td>
-            <td><input data-bind="value: day" /></td>
-            <td><button data-bind='click: $root.removeTask'>Remove a Task</button></td>
-        </tr>
-    </tbody>
-</table>
-<p>Count: <span data-bind='text: tasks().length'></span>
-<button data-bind='click: addTask'>Add a Task</button>
-<button data-bind='click: sortTasksAsc'>Sort Asc</button>
-<button data-bind='click: sortTasksDesc'>Sort Desc</button>
+<div id="taskviewmodel">
+    <table>
+        <thead>
+            <tr>
+                <th>Task ID</th>
+                <th>Task</th>
+                <th>Day</th>
+                <th>Reminder</th>
+                <th>Reminder Type</th>
+                <th>Task</th>
+                <th>Day</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: _tasks">
+            <tr>
+                <td><input data-bind="value: _id" /></td>
+                <td><input data-bind='value: _task, valueUpdate: "afterkeydown"' /></td>
+                <td><input data-bind="value: _day._day" /></td>
+                <td><input data-bind="value: _reminder._reminder" /></td>
+                <td><input data-bind="value: _reminder._reminder_type.reminder_type" /></td>
+                <td><input data-bind="value: _task" /></td>
+                <td><input data-bind="value: _day._day" /></td>
+                <td><button data-bind='click: $root.removeTask'>Remove a Task</button></td>
+            </tr>
+        </tbody>
+    </table>
+    Count: <span data-bind='text: _tasks().length'></span>
+    <button data-bind='click: addTask'>Add a Task</button>
+    <button data-bind='click: sortTasksAsc'>Sort Asc</button>
+    <button data-bind='click: sortTasksDesc'>Sort Desc</button>
+</div>
 <script>
     {{ schedule|knockout }}
 </script>
