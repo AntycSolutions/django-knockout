@@ -5,8 +5,7 @@ from django import template
 register = template.Library()
 
 
-@register.filter
-def knockout(values):
+def _get_model_queryset(values):
     if isinstance(values, (QuerySet, list)):
         queryset = values
         model = values[0]
@@ -14,42 +13,63 @@ def knockout(values):
         queryset = [values]
         model = values
 
-    fields = ko.get_fields(model)
+    return model, queryset
 
-    return ko.ko(model, queryset, fields)
+
+def _get_model(values):
+    if isinstance(values, (QuerySet, list)):
+        model = values[0]
+    else:
+        model = values
+
+    return model
+
+
+@register.filter
+def knockout(values):
+    model, queryset = _get_model_queryset(values)
+
+    model_class = model.__class__
+
+    return ko.ko(model_class, queryset)
 
 
 @register.filter
 def knockout_data(values):
-    if isinstance(values, (QuerySet, list)):
-        queryset = values
-        model = values[0]
-    else:
-        queryset = [values]
-        model = values
+    model, queryset = _get_model_queryset(values)
 
-    fields = ko.get_fields(model)
+    model_class = model.__class__
 
-    return ko.ko_data(model, queryset, fields)
+    return ko.ko_data(model_class, queryset,)
 
 
 @register.filter
-def knockout_model(values):
-    if isinstance(values, (QuerySet, list)):
-        model = values[0]
-    else:
-        model = values
+def knockout_view_model(values):
+    model = _get_model(values)
 
-    fields = ko.get_fields(model)
+    model_class = model.__class__
 
-    return ko.ko_model(model, fields)
+    return ko.ko_view_model(model_class)
 
 
 @register.filter
 def knockout_bindings(values):
-    if isinstance(values, (QuerySet, list)):
-        model = values[0]
-    else:
-        model = values
+    model = _get_model(values)
 
-    return ko.ko_bindings(model)
+    model_class = model.__class__
+
+    return ko.ko_bindings(model_class)
+
+
+@register.simple_tag
+def knockout_model(values):
+    model = _get_model(values)
+
+    return ko.ko_model(model)
+
+
+@register.simple_tag
+def knockout_list(values):
+    model = _get_model(values)
+
+    return ko.ko_list(model)
