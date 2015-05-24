@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'persons/$', views.Persons.as_view(), name='persons'),
     url(r'schedule/$', views.Schedule.as_view(), name='schedule'),
     url(r'shopping/$', views.Shopping.as_view(), name='shopping'),
+    url(r'multiple_models/$', views.MultipleModels.as_view(),
+        name='multiple_models'),
 ]
