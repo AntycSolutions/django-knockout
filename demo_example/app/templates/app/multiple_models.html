@@ -1,0 +1,204 @@
+{% load knockout %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js'></script>
+</head>
+<body>
+
+<h1>Django</h1>
+<h2>Person</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for person in persons %}
+        <tr>
+            <td>{{ person.id }}</td>
+            <td>{{ person.first_name }}</td>
+            <td>{{ person.last_name }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h2>Schedule</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Task ID</th>
+            <th>Task</th>
+            <th>Day</th>
+            <th>Reminder</th>
+            <th>Reminder Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in schedule %}
+        <tr>
+            <td>{{ task.id }}</td>
+            <td>{{ task.task }}</td>
+            <td>{{ task.day.day }}</td>
+            <td>{{ task.reminder.reminder }}</td>
+            <td>{{ task.reminder.reminder_type.reminder_type }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h2>Shopping</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Shopping List ID</th>
+            <th>Shopping List Name</th>
+            <th>Items</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for shopping_list in shopping_lists %}
+        <tr>
+            <td>{{ shopping_list.id }}</td>
+            <td>{{ shopping_list.name }}</td>
+            <td>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in shopping_list.items.all %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h1>Knockout</h1>
+<h2>Person</h2>
+<div id="personviewmodel">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: _persons">
+            <tr>
+                <td><input data-bind="value: _id" /></td>
+                <td><input data-bind='value: _first_name, valueUpdate: "afterkeydown"' /></td>
+                <td><input data-bind="value: _last_name" /></td>
+                <td><input data-bind="value: _first_name" /></td>
+                <td><input data-bind="value: _last_name" /></td>
+                <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
+            </tr>
+        </tbody>
+    </table>
+    Count: <span data-bind='text: _persons().length'></span>
+    <button data-bind='click: addPerson'>Add a Person</button>
+    <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
+    <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+</div>
+<script>
+    {{ persons|knockout }}
+</script>
+<h2>Schedule</h2>
+<div id="taskviewmodel">
+    <table>
+        <thead>
+            <tr>
+                <th>Task ID</th>
+                <th>Task</th>
+                <th>Day</th>
+                <th>Reminder</th>
+                <th>Reminder Type</th>
+                <th>Task</th>
+                <th>Day</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: _tasks">
+            <tr>
+                <td><input data-bind="value: _id" /></td>
+                <td><input data-bind='value: _task, valueUpdate: "afterkeydown"' /></td>
+                <td><input data-bind="value: _day._day" /></td>
+                <td><input data-bind="value: _reminder._reminder" /></td>
+                <td><input data-bind="value: _reminder._reminder_type.reminder_type" /></td>
+                <td><input data-bind="value: _task" /></td>
+                <td><input data-bind="value: _day._day" /></td>
+                <td><button data-bind='click: $root.removeTask'>Remove a Task</button></td>
+            </tr>
+        </tbody>
+    </table>
+    Count: <span data-bind='text: _tasks().length'></span>
+    <button data-bind='click: addTask'>Add a Task</button>
+    <button data-bind='click: sortTasksAsc'>Sort Asc</button>
+    <button data-bind='click: sortTasksDesc'>Sort Desc</button>
+</div>
+<script>
+    {{ schedule|knockout }}
+</script>
+<h2>Shopping</h2>
+<div id="shoppingviewmodel">
+    <table>
+        <thead>
+            <tr>
+                <th>Shopping List ID</th>
+                <th>Name</th>
+                <th>Items</th>
+                <th>Name</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: _shoppings">
+            <tr>
+                <td><input data-bind="value: _id" /></td>
+                <td><input data-bind='value: _name, valueUpdate: "afterkeydown"' /></td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: _items">
+                            <tr>
+                                <td><input data-bind="value: _name" /></td>
+                                <td><button data-bind='click: $parent.removeItem'>Remove an Item</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    Count: <span data-bind='text: _items().length'></span>
+                    <button data-bind='click: addItem'>Add an Item</button>
+                </td>
+                <td><input data-bind="value: _name" /></td>
+                <td><button data-bind='click: $root.removeShopping'>Remove a Shopping List</button></td>
+            </tr>
+        </tbody>
+    </table>
+    Count: <span data-bind='text: _shoppings().length'></span>
+    <button data-bind='click: addShopping'>Add a Shopping List</button>
+    <button data-bind='click: sortShoppingsAsc'>Sort Asc</button>
+    <button data-bind='click: sortShoppingsDesc'>Sort Desc</button>
+</div>
+<script>
+    {{ shopping_lists|knockout }}
+</script>
+
+</body>
+</html>
