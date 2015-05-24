@@ -4,31 +4,30 @@
 <html lang="en">
 <head>
     <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js'></script>
-    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.min.js'></script>
 </head>
 <body>
 
 <h1>Django</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for person in persons %}
+        <tr>
+            <td>{{ person.id }}</td>
+            <td>{{ person.first_name }}</td>
+            <td>{{ person.last_name }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h1>Knockout</h1>
 <div id="personviewmodel">
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for person in persons %}
-            <tr>
-                <td>{{ person.id }}</td>
-                <td>{{ person.first_name }}</td>
-                <td>{{ person.last_name }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <h1>Knockout</h1>
     <table>
         <thead>
             <tr>
