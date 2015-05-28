@@ -61,14 +61,14 @@ def knockout_bindings(values):
     return ko.ko_bindings(model_class)
 
 
-@register.simple_tag
+@register.filter
 def knockout_model(values):
     model = _get_model(values)
 
     return ko.ko_model(model)
 
 
-@register.simple_tag
+@register.filter
 def knockout_list(values):
     model = _get_model(values)
 
