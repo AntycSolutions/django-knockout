@@ -40,7 +40,7 @@ class Shopping(TemplateView):
         context = super().get_context_data(**kwargs)
 
         shopping_lists = models.Shopping.objects.all().prefetch_related(
-            'items'
+            'items', 'items__description'
         )
         context['shopping_lists'] = shopping_lists
 
@@ -62,7 +62,7 @@ class MultipleModels(TemplateView):
         context['schedule'] = schedule
 
         shopping_lists = models.Shopping.objects.all().prefetch_related(
-            'items'
+            'items', 'items__description'
         )
         context['shopping_lists'] = shopping_lists
 
