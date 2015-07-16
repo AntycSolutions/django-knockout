@@ -1,16 +1,31 @@
 {% load knockout %}
 var {{ model_name }} = function(data) {
     var self = this;
-    {% for field in fields %}
-    self._{{ field }} = ko.observable(data.{{ field }});
+
+    if (data) {
+        {% for field in fields %}
+        self.{{ field }} = ko.observable(data.{{ field }});
+        {% endfor %}
+        {% for knockout_model in fk_knockout_models %}
+        var data_{{ knockout_model.field_name }} = (data.{{ knockout_model.field_name }}) ? data.{{ knockout_model.field_name }} : data;
+        self.{{ knockout_model.field_name }} = new {{ knockout_model.model_name }}(data_{{ knockout_model.field_name }});
+        {% endfor %}
+    }
+    else {
+        {% for field in fields %}
+        self.{{ field }} = ko.observable();
+        {% endfor %}
+        {% for knockout_model in fk_knockout_models %}
+        self.{{ knockout_model.field_name }} = new {{ knockout_model.model_name }}();
+        {% endfor %}
+    }
+    {% for m2m_knockout_model in m2m_knockout_models %}
+    {{ m2m_knockout_model.model_list }}
     {% endfor %}
-    {% for field_dict in fk_fields %}
-    {{ field_dict.model_string }}
-    var data_{{ field_dict.field_name }} = (data.{{ field_dict.field_name }}) ? data.{{ field_dict.field_name }} : data;
-    self._{{ field_dict.field_name }} = new {{ field_dict.model_name }}(data_{{ field_dict.field_name }});
-    {% endfor %}
-    {% for field_dict in m2m_fields %}
-    {{ field_dict.model_string }}
-    {{ field_dict.model_list }}
-    {% endfor %}
-}
+} // {{ model_name }}
+{% for knockout_model in fk_knockout_models %}
+{{ knockout_model.model_string }}
+{% endfor %}
+{% for m2m_knockout_model in m2m_knockout_models %}
+{{ m2m_knockout_model.model_string }}
+{% endfor %}
