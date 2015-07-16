@@ -39,18 +39,18 @@
                 <th>Remove</th>
             </tr>
         </thead>
-        <tbody data-bind="foreach: _persons">
+        <tbody data-bind="foreach: persons">
             <tr>
-                <td><input data-bind="value: _id" /></td>
-                <td><input data-bind='value: _first_name, valueUpdate: "afterkeydown"' /></td>
-                <td><input data-bind="value: _last_name" /></td>
-                <td><input data-bind="value: _first_name" /></td>
-                <td><input data-bind="value: _last_name" /></td>
+                <td><input data-bind="value: id" /></td>
+                <td><input data-bind='value: first_name, valueUpdate: "afterkeydown"' /></td>
+                <td><input data-bind="value: last_name" /></td>
+                <td><input data-bind="value: first_name" /></td>
+                <td><input data-bind="value: last_name" /></td>
                 <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
             </tr>
         </tbody>
     </table>
-    Count: <span data-bind='text: _persons().length'></span>
+    Count: <span data-bind='text: persons().length'></span>
     <button data-bind='click: addPerson'>Add a Person</button>
     <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
     <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
