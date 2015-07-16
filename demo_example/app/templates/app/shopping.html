@@ -53,10 +53,10 @@
                 <th>Remove</th>
             </tr>
         </thead>
-        <tbody data-bind="foreach: _shoppings">
+        <tbody data-bind="foreach: shoppings">
             <tr>
-                <td><input data-bind="value: _id" /></td>
-                <td><input data-bind='value: _name, valueUpdate: "afterkeydown"' /></td>
+                <td><input data-bind="value: id" /></td>
+                <td><input data-bind='value: name, valueUpdate: "afterkeydown"' /></td>
                 <td>
                     <table>
                         <thead>
@@ -64,22 +64,25 @@
                                 <th>Item Name</th>
                             </tr>
                         </thead>
-                        <tbody data-bind="foreach: _items">
+                        <tbody data-bind="foreach: items">
                             <tr>
-                                <td><input data-bind="value: _name" /></td>
+                                <td><input data-bind="value: id" /></td>
+                                <td><input data-bind="value: name" /></td>
                                 <td><button data-bind='click: $parent.removeItem'>Remove an Item</button></td>
                             </tr>
                         </tbody>
                     </table>
-                    Count: <span data-bind='text: _items().length'></span>
+                    Count: <span data-bind='text: items().length'></span>
                     <button data-bind='click: addItem'>Add an Item</button>
+                    <button data-bind='click: sortItemsAsc'>Sort Asc</button>
+                    <button data-bind='click: sortItemsDesc'>Sort Desc</button>
                 </td>
-                <td><input data-bind="value: _name" /></td>
+                <td><input data-bind="value: name" /></td>
                 <td><button data-bind='click: $root.removeShopping'>Remove a Shopping List</button></td>
             </tr>
         </tbody>
     </table>
-    Count: <span data-bind='text: _shoppings().length'></span>
+    Count: <span data-bind='text: shoppings().length'></span>
     <button data-bind='click: addShopping'>Add a Shopping List</button>
     <button data-bind='click: sortShoppingsAsc'>Sort Asc</button>
     <button data-bind='click: sortShoppingsDesc'>Sort Desc</button>

@@ -98,18 +98,18 @@
                 <th>Remove</th>
             </tr>
         </thead>
-        <tbody data-bind="foreach: _persons">
+        <tbody data-bind="foreach: persons">
             <tr>
-                <td><input data-bind="value: _id" /></td>
-                <td><input data-bind='value: _first_name, valueUpdate: "afterkeydown"' /></td>
-                <td><input data-bind="value: _last_name" /></td>
-                <td><input data-bind="value: _first_name" /></td>
-                <td><input data-bind="value: _last_name" /></td>
+                <td><input data-bind="value: id" /></td>
+                <td><input data-bind='value: first_name, valueUpdate: "afterkeydown"' /></td>
+                <td><input data-bind="value: last_name" /></td>
+                <td><input data-bind="value: first_name" /></td>
+                <td><input data-bind="value: last_name" /></td>
                 <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
             </tr>
         </tbody>
     </table>
-    Count: <span data-bind='text: _persons().length'></span>
+    Count: <span data-bind='text: persons().length'></span>
     <button data-bind='click: addPerson'>Add a Person</button>
     <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
     <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
@@ -132,20 +132,20 @@
                 <th>Remove</th>
             </tr>
         </thead>
-        <tbody data-bind="foreach: _tasks">
+        <tbody data-bind="foreach: tasks">
             <tr>
-                <td><input data-bind="value: _id" /></td>
-                <td><input data-bind='value: _task, valueUpdate: "afterkeydown"' /></td>
-                <td><input data-bind="value: _day._day" /></td>
-                <td><input data-bind="value: _reminder._reminder" /></td>
-                <td><input data-bind="value: _reminder._reminder_type.reminder_type" /></td>
-                <td><input data-bind="value: _task" /></td>
-                <td><input data-bind="value: _day._day" /></td>
+                <td><input data-bind="value: id" /></td>
+                <td><input data-bind='value: task, valueUpdate: "afterkeydown"' /></td>
+                <td><input data-bind="value: day.day" /></td>
+                <td><input data-bind="value: reminder.reminder" /></td>
+                <td><input data-bind="value: reminder.reminder_type.reminder_type" /></td>
+                <td><input data-bind="value: task" /></td>
+                <td><input data-bind="value: day.day" /></td>
                 <td><button data-bind='click: $root.removeTask'>Remove a Task</button></td>
             </tr>
         </tbody>
     </table>
-    Count: <span data-bind='text: _tasks().length'></span>
+    Count: <span data-bind='text: tasks().length'></span>
     <button data-bind='click: addTask'>Add a Task</button>
     <button data-bind='click: sortTasksAsc'>Sort Asc</button>
     <button data-bind='click: sortTasksDesc'>Sort Desc</button>
@@ -165,33 +165,38 @@
                 <th>Remove</th>
             </tr>
         </thead>
-        <tbody data-bind="foreach: _shoppings">
+        <tbody data-bind="foreach: shoppings">
             <tr>
-                <td><input data-bind="value: _id" /></td>
-                <td><input data-bind='value: _name, valueUpdate: "afterkeydown"' /></td>
+                <td><input data-bind="value: id" /></td>
+                <td><input data-bind='value: name, valueUpdate: "afterkeydown"' /></td>
                 <td>
                     <table>
                         <thead>
                             <tr>
                                 <th>Item Name</th>
+                                <th>Description</th>
                             </tr>
                         </thead>
-                        <tbody data-bind="foreach: _items">
+                        <tbody data-bind="foreach: items">
                             <tr>
-                                <td><input data-bind="value: _name" /></td>
+                                <td><input data-bind="value: id" /></td>
+                                <td><input data-bind="value: name" /></td>
+                                <td><input data-bind="value: description.description" /></td>
                                 <td><button data-bind='click: $parent.removeItem'>Remove an Item</button></td>
                             </tr>
                         </tbody>
                     </table>
-                    Count: <span data-bind='text: _items().length'></span>
+                    Count: <span data-bind='text: items().length'></span>
                     <button data-bind='click: addItem'>Add an Item</button>
+                    <button data-bind='click: sortItemsAsc'>Sort Asc</button>
+                    <button data-bind='click: sortItemsDesc'>Sort Desc</button>
                 </td>
-                <td><input data-bind="value: _name" /></td>
+                <td><input data-bind="value: name" /></td>
                 <td><button data-bind='click: $root.removeShopping'>Remove a Shopping List</button></td>
             </tr>
         </tbody>
     </table>
-    Count: <span data-bind='text: _shoppings().length'></span>
+    Count: <span data-bind='text: shoppings().length'></span>
     <button data-bind='click: addShopping'>Add a Shopping List</button>
     <button data-bind='click: sortShoppingsAsc'>Sort Asc</button>
     <button data-bind='click: sortShoppingsDesc'>Sort Desc</button>
