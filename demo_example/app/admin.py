@@ -11,6 +11,7 @@ admin.site.register(models.Reminder)
 admin.site.register(models.Task)
 admin.site.register(models.Shopping)
 admin.site.register(models.Item)
+admin.site.register(models.Description)
 
 # Unused, don't display
 admin.site.unregister(Group)

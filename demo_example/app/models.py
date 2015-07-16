@@ -25,8 +25,13 @@ class Task(models.Model):
     reminder = models.ForeignKey(Reminder, blank=True, null=True)
 
 
+class Description(models.Model):
+    description = models.TextField("Description")
+
+
 class Item(models.Model):
     name = models.CharField("Name", max_length=64)
+    description = models.ForeignKey(Description, blank=True, null=True)
 
 
 class Shopping(models.Model):
