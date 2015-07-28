@@ -63,6 +63,7 @@ ko.applyBindings(new MyObjectViewModel(), document.getElementById("myobjectviewm
 With just this!
 
 ```django
+{# template #}
 {{ my_objects|knockout }}
 ```
 
@@ -75,7 +76,7 @@ Quick Start
     git clone github.com/AntycSolutions/django-knockout
     ```
     via pip
-    ```python
+    ```bash
     pip install django-knockout
     ```
 
@@ -91,8 +92,8 @@ Quick Start
 
 2. Include knockout.js in your HTML:
 
-    ```html
-    # template
+    ```django
+    {# template #}
     <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js'></script>
     // Optionally needed if you're using forms/formsets
     <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout-pre-rendered/0.5.0/knockout-pre-rendered.min.js'></script>
@@ -100,8 +101,8 @@ Quick Start
 
 4. Knockout your QuerySet:
 
-    ```html
-    # template
+    ```django
+    {# template #}
     {% load knockout %}
     <script>
         {{ my_objects|knockout }}
@@ -110,8 +111,8 @@ Quick Start
 
 6. Loop over your bound data like so:
 
-    ```html
-    # template
+    ```django
+    {# template #}
     <div id="myobjectviewmodel">
         <div data-bind="foreach: myobjects">
             My Name: <span data-bind="value: my_name"></span>
@@ -126,24 +127,28 @@ Simple Usage
 **django-knockout** can be used directly in templates to generate knockout models and knockout-ready data, or either one you choose. To put a QuerySet directly into a django template as a Knockout object, you can do this:
 
 ```django
+{# template #}
 {{ my_objects|knockout }}
 ```
 
 To get the data object by itself, you can do this:
 
 ```django
+{# template #}
 {{ my_objects|knockout_data }}
 ```
 
 Similarly, you can get just the model, if you prefer to load your data from apis, like this:
 
 ```django
+{# template #}
 {{ my_objects|knockout_model }}
 ```
 
 And even just the bindings:
 
 ```django
+{# template #}
 {% knockout_bindings my_objects %}
 ```
 
@@ -206,38 +211,39 @@ Sorting
 django-knockout provides some convenient methods for sorting your data (see below for changing the comparator): 
 
 ```javascript
-    self.sortMyObjectsAsc = function() {
-        self.myobjects.sort(function(a, b) {
-            var a_comparator = a.id();
-            var b_comparator = b.id();
-            if (!a_comparator) { a_comparator = undefined; }
-            if (!b_comparator) { b_comparator = undefined; }
-            var result = a_comparator>b_comparator?-1:a_comparator<b_comparator?1:0;
+self.sortMyObjectsAsc = function() {
+    self.myobjects.sort(function(a, b) {
+        var a_comparator = a.id();
+        var b_comparator = b.id();
+        if (!a_comparator) { a_comparator = undefined; }
+        if (!b_comparator) { b_comparator = undefined; }
+        var result = a_comparator>b_comparator?-1:a_comparator<b_comparator?1:0;
 
-            sorted = true;
+        sorted = true;
 
-            return result;
-        });
-    };
+        return result;
+    });
+};
 
-    self.sortMyObjectsDesc = function() {
-        self.myobjects.sort(function(a, b) {
-            var a_comparator = a.id();
-            var b_comparator = b.id();
-            if (!a_comparator) { a_comparator = undefined; }
-            if (!b_comparator) { b_comparator = undefined; }
-            var result = a_comparator<b_comparator?-1:a_comparator>b_comparator?1:0;
+self.sortMyObjectsDesc = function() {
+    self.myobjects.sort(function(a, b) {
+        var a_comparator = a.id();
+        var b_comparator = b.id();
+        if (!a_comparator) { a_comparator = undefined; }
+        if (!b_comparator) { b_comparator = undefined; }
+        var result = a_comparator<b_comparator?-1:a_comparator>b_comparator?1:0;
 
-            sorted = true;
+        sorted = true;
 
-            return result;
-        });
-    };
+        return result;
+    });
+};
 ```
 
 Include this in your template:
 
-```javascript
+```django
+{# template #}
 <button data-bind='click: sortMyObjectsAsc'>Sort Asc</button>
 <button data-bind='click: sortMyObjectsDesc'>Sort Desc</button>
 ```
@@ -257,12 +263,13 @@ Multi-Model Support
 django-knockout is all ready set up to be used with multiple types of data at the same time, as bindings happen to specific objects:
 
 ```javascript
-ko.applyBindings(new MyObjectViewModel(), document.getElementById('myobjects'));
+ko.applyBindings(new MyObjectViewModel(), document.getElementById('myobjectviewmodel'));
 ```
 
 which means that you somewhere in your HTML template, you will need to have an object with that id, like so:
 
-```html
+```django
+{# template #}
 <div id="myobjectviewmodel">
     <div data-bind="foreach: my_objects">
         User <span data-bind="value: my_name"></span> is number <span data-bind="value: my_number"></span>.
@@ -278,6 +285,7 @@ Multi-Data Support
 If you're using multiple QuerySets of the same type, you'll need to define a custom name for the data variables.
 
 ```django
+{# template #}
 {{ my_objects|knockout_data:'CustomMyObjectData' }}
 # and
 {% knockout_bindings my_objects data_variable='CustomMyObjectData' %}
