@@ -92,7 +92,7 @@ Quick Start
 
 2. Include knockout.js in your HTML:
 
-    ```django
+    ```html+django
     {# template #}
     <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js'></script>
     // Optionally needed if you're using forms/formsets
@@ -101,7 +101,7 @@ Quick Start
 
 4. Knockout your QuerySet:
 
-    ```django
+    ```html+django
     {# template #}
     {% load knockout %}
     <script>
@@ -111,7 +111,7 @@ Quick Start
 
 6. Loop over your bound data like so:
 
-    ```django
+    ```html+django
     {# template #}
     <div id="myobjectviewmodel">
         <div data-bind="foreach: myobjects">
@@ -126,28 +126,28 @@ Simple Usage
 
 **django-knockout** can be used directly in templates to generate knockout models and knockout-ready data, or either one you choose. To put a QuerySet directly into a django template as a Knockout object, you can do this:
 
-```django
+```html+django
 {# template #}
 {{ my_objects|knockout }}
 ```
 
 To get the data object by itself, you can do this:
 
-```django
+```html+django
 {# template #}
 {{ my_objects|knockout_data }}
 ```
 
 Similarly, you can get just the model, if you prefer to load your data from apis, like this:
 
-```django
+```html+django
 {# template #}
 {{ my_objects|knockout_model }}
 ```
 
 And even just the bindings:
 
-```django
+```html+django
 {# template #}
 {% knockout_bindings my_objects %}
 ```
@@ -242,7 +242,7 @@ self.sortMyObjectsDesc = function() {
 
 Include this in your template:
 
-```django
+```html+django
 {# template #}
 <button data-bind='click: sortMyObjectsAsc'>Sort Asc</button>
 <button data-bind='click: sortMyObjectsDesc'>Sort Desc</button>
@@ -268,7 +268,7 @@ ko.applyBindings(new MyObjectViewModel(), document.getElementById('myobjectviewm
 
 which means that you somewhere in your HTML template, you will need to have an object with that id, like so:
 
-```django
+```html+django
 {# template #}
 <div id="myobjectviewmodel">
     <div data-bind="foreach: my_objects">
@@ -284,7 +284,7 @@ Multi-Data Support
 
 If you're using multiple QuerySets of the same type, you'll need to define a custom name for the data variables.
 
-```django
+```html+django
 {# template #}
 {{ my_objects|knockout_data:'CustomMyObjectData' }}
 # and
