@@ -1,10 +1,22 @@
 from django.views.generic import TemplateView
+from django.views.generic.edit import UpdateView
+from django.forms.models import modelformset_factory
+from django.core.urlresolvers import reverse
 
+from app.forms import forms
 from app import models
 
 
 class Index(TemplateView):
     template_name = "app/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        person = models.Person.objects.first()
+        context['person'] = person
+
+        return context
 
 
 class Persons(TemplateView):
@@ -17,6 +29,63 @@ class Persons(TemplateView):
         context['persons'] = persons
 
         return context
+
+
+class PersonsForm(UpdateView):
+    template_name = "app/persons_form.html"
+    model = models.Person
+    fields = '__all__'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['PersonClass'] = models.Person
+
+        context['form2'] = forms.PersonForm(instance=self.object)
+
+        return context
+
+    def get_success_url(self):
+        self.success_url = reverse('persons_form',
+                                   kwargs={'pk': self.object.pk})
+
+        return self.success_url
+
+
+class PersonsFormset(UpdateView):
+    template_name = "app/persons_formset.html"
+    model = models.Person
+    form_class = modelformset_factory(models.Person, fields='__all__',
+                                      can_delete=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if 'form' in context:
+            formset = context.pop('form')
+            context['formset'] = formset
+
+        return context
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        return queryset
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        if 'instance' in kwargs:
+            queryset = kwargs.pop('instance')
+            kwargs['queryset'] = queryset
+
+        return kwargs
+
+    def get_success_url(self):
+        self.success_url = reverse('persons_formset')
+
+        return self.success_url
 
 
 class Schedule(TemplateView):
