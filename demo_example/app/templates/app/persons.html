@@ -97,7 +97,7 @@
 
 <script>
     {{ persons|knockout }} {# personviewmodel #}
-    {{ persons|knockout_bindings:"prerendered,ignore_data"}}
+    {% knockout_bindings persons element_id="prerendered" ignore_data=False %}
 </script>
 
 </body>

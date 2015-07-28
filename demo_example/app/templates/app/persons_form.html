@@ -58,7 +58,7 @@
 
 <script>
     {{ PersonClass|knockout:"ignore_queryset" }}
-    {{ PersonClass|knockout_bindings:"automatic"}}
+    {% knockout_bindings PersonClass element_id="automatic" %}
 </script>
 
 </body>
