@@ -4,6 +4,7 @@ import datetime
 
 from django.template.loader import render_to_string
 from django.db.models.fields import related
+from django.utils.safestring import mark_safe
 
 
 class KnockoutModel():
@@ -136,7 +137,7 @@ def ko_view_model(model, knockout_model=None):
     return view_model_string
 
 
-def ko_bindings(model, element_id=None):
+def ko_bindings(model, element_id=None, ignore_data=False):
     model_name = model.__name__
     view_model_string = model_name + "ViewModel"
     model_data_string = model_name + "Data"
@@ -145,7 +146,8 @@ def ko_bindings(model, element_id=None):
         "knockout/bindings.js",
         {'view_model_string': view_model_string,
          'model_data_string': model_data_string,
-         'element_id': element_id}
+         'element_id': element_id,
+         'ignore_data': ignore_data}
     )
 
     return model_bindings_string
@@ -284,7 +286,9 @@ def ko(model, queryset, knockout_model=None):
     if not knockout_model:
         knockout_model = KnockoutModel(model)
 
-    ko_data_string = ko_data(model, queryset, knockout_model)
+    ko_data_string = (ko_data(model, queryset, knockout_model)
+                      if queryset else mark_safe(""))
+
     ko_view_model_string = ko_view_model(model, knockout_model)
     ko_bindings_string = ko_bindings(model)
 
