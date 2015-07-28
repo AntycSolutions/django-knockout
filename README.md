@@ -1,7 +1,7 @@
 django-knockout
-==============
+===============
 
-**django-knockout** makes it super easy to use knockout.js with your Django models. It's great for project with objects that have lots of different models, or models with lots of different fields, or both. It can be used in both prototyping complex applications and directly in the templates of simple ones.
+**[django-knockout](//github.com/AntycSolutions/django-knockout)** makes it super easy to use [knockout.js](//knockoutjs.com/) with your [Django](//www.djangoproject.com/) models. It's great for project with objects that have lots of different models, or models with lots of different fields, or both. It can be used in both prototyping complex applications and directly in the templates of simple ones.
 
 Forked from [django-knockout-modeler](https://github.com/Miserlou/django-knockout-modeler).
 
@@ -21,7 +21,7 @@ myObjects = MyObject.objects.all()
 into this:
 
 ```javascript
-var MyObjectData = [{   
+var MyObjectData = [{
     "myNumber": 666,
     "myName": "Gabe Newell"
 }];
@@ -31,15 +31,15 @@ function MyObject(data) {
     myName = ko.observable()
 }
 
-function MyObjectViewModel() { 
+function MyObjectViewModel() {
     var self = this;
     self.myobjects = ko.observableArray(MyObjectData);
 
     self.addMyObject = function(myobject) {
         self.myobjects.push(myobject);
     };
-    self.removeMyObject = function(myobject){ 
-        self.myobjects.remove(myobject) 
+    self.removeMyObject = function(myobject){
+        self.myobjects.remove(myobject)
     };
     self.sortMyObjectsAsc = function(){
         self.myobjects(self.myobjects().sort(function(a, b) {
@@ -68,7 +68,7 @@ Quick start
 0. Install django-knockout // TODO
 
     ```python
-    pip install django-knockout-modeler
+    pip install django-knockout
     ```
 
 1. Add 'knockout' to your INSTALLED_APPS setting like this: // TODO
@@ -88,7 +88,7 @@ Quick start
 
 4. Knockout your QuerySet:
 
-    ```html   
+    ```html
     {% load knockout %}
     <script>
         {{ myObjects|knockout }}
@@ -103,14 +103,14 @@ Quick start
             <h2><span data-bind="text: myName"></span></h2>
             <h3><span data-bind="text: myNumber"></span></h3>
         </div>
-    </script> 
+    </script>
     ```
 
 6. Loop over your bound data like so:
 
     ```html
     <div id="myobjects">
-        <div data-bind="template: { name: 'myTemplate', foreach: myobjects }"></div>   
+        <div data-bind="template: { name: 'myTemplate', foreach: myobjects }"></div>
     </div>
     ```
 
@@ -123,13 +123,13 @@ Simple Usage
 {{ myObjects | knockout }}
 ```
 
-To get the data object by itself, you can do this: 
+To get the data object by itself, you can do this:
 
 ```django
 {{ myObjects | knockout_data }}
 ```
 
-Similarly, you can get just the model, if you prefer to load your data from apis, like this: 
+Similarly, you can get just the model, if you prefer to load your data from apis, like this:
 
 ```django
 {{ myObjects | knockout_model }}
