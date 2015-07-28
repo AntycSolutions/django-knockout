@@ -61,13 +61,17 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Item ID</th>
                                 <th>Item Name</th>
+                                <th>Description</th>
+                                <th>Remove</th>
                             </tr>
                         </thead>
                         <tbody data-bind="foreach: items">
                             <tr>
                                 <td><input data-bind="value: id" /></td>
                                 <td><input data-bind="value: name" /></td>
+                                <td><input data-bind="value: description.description" /></td>
                                 <td><button data-bind='click: $parent.removeItem'>Remove an Item</button></td>
                             </tr>
                         </tbody>
