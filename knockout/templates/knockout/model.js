@@ -19,6 +19,8 @@ var {{ model_name }} = function(data) {
         self.{{ knockout_model.field_name }} = new {{ knockout_model.model_name }}();
         {% endfor %}
     }
+    self.form_prefix = ko.observable();
+    self.DELETE = ko.observable();
     {% for m2m_knockout_model in m2m_knockout_models %}
     {{ m2m_knockout_model.model_list }}
     {% endfor %}
