@@ -1,0 +1,67 @@
+{% load knockout %}
+{% load add_css %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-debug.js'></script>
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout-pre-rendered/0.5.0/knockout-pre-rendered.js'></script>
+</head>
+<body>
+
+<h1>Knockout</h1>
+<div id="personviewmodel">
+    <form method="POST">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {{ formset.non_form_errors }}
+        <div data-bind="foreachInit: { data: persons, createElement: createPerson, afterQueueFlush: afterAddPerson }">
+            <div data-template id="{{ formset.empty_form.prefix }}">
+                {% for field in formset.empty_form %}
+                    {{ field.errors }}
+                    {% if not field.is_hidden %}
+                        {{ field.label_tag }}
+                    {% endif %}
+                    {% data_bind field 'template' as data_bind %}
+                    {{ field|add_css:data_bind }}
+                    {# remove #}{% if field.name == 'first_name' %}
+                        <input data-bind="value: first_name">
+                    {% endif %}
+                {% endfor %}
+                <input type="hidden" data-bind="value: form_prefix">
+            </div>
+            {% for form in formset %}
+                <div data-init>
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                        {{ field.errors }}
+                        {% if not field.is_hidden %}
+                            {{ field.label_tag }}
+                        {% endif %}
+                        {% data_bind field as data_bind %}
+                        {{ field|add_css:data_bind }}
+                        {# remove #}{% if field.name == 'first_name' %}
+                            <input data-bind="value: first_name">
+                        {% endif %}
+                    {% endfor %}
+                    <input type="hidden" data-bind="init, value: form_prefix" value="{{ form.prefix }}">
+                </div>
+            {% endfor %}
+        </div>
+        Count: <span data-bind='text: persons().length'></span>
+        <button data-bind='click: addPerson'>Add a Person</button>
+        <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
+        <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+        <br />
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    var total_form_count = document.getElementById('id_' + '{{ formset.get_default_prefix }}' + '-TOTAL_FORMS');
+    var empty_form_prefix = "{{ formset.empty_form.prefix }}";
+    {{ object|knockout:"ignore_queryset" }}
+</script>
+
+</body>
+</html>

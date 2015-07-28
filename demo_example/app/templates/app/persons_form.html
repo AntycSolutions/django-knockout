@@ -1,0 +1,65 @@
+{% load knockout %}
+{% load add_css %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-debug.js'></script>
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout-pre-rendered/0.5.0/knockout-pre-rendered.min.js'></script>
+</head>
+<body>
+
+<h1>Django</h1>
+
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            {{ form }}
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<h1>Knockout</h1>
+
+<h2>Manual</h2>
+<div id="personviewmodel">
+    <form method="POST" data-bind="foreachInit: { data: persons, createElement: createPerson }">
+        {% csrf_token %}
+        <div data-template></div>
+        <div data-init>
+            {% for field in form %}
+                {{ field.errors }}
+                {% if not field.is_hidden %}
+                    {{ field.label_tag }}
+                {% endif %}
+                {% data_bind field as data_bind %}
+                {{ field|add_css:data_bind }}
+            {% endfor %}
+            First Name: <input data-bind="value: first_name">
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<h2>Automatic</h2>
+<div id="automatic">
+    <form method="POST" data-bind="foreachInit: { data: persons, createElement: createPerson }">
+        {% csrf_token %}
+        <div data-template></div>
+        <div data-init>
+            {{ form2.as_table }}
+            First Name: <input data-bind="value: first_name">
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    {{ PersonClass|knockout:"ignore_queryset" }}
+    {{ PersonClass|knockout_bindings:"automatic"}}
+</script>
+
+</body>
+</html>
