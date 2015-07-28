@@ -13,20 +13,24 @@ Knockout pre-rendered 0.5
 **django-knockout** turns this:
 
 ```python
+# models.py
 class MyObject(models.Model):
     my_number = models.IntegerField()
     my_name = models.CharField()
-
+    
+# views.py
 my_objects = MyObject.objects.all()
 ```
 
-into this:
+Into this:
 
 ```javascript
-var MyObjectData = [{
-    "my_number": 666,
-    "my_name": "Gabe Newell"
-}];
+var MyObjectData = {
+    "myobject": [
+        {"my_number": 666,
+         "my_name": "Gabe Newell"}
+    ]
+};
 
 var MyObject = function (data) {
     var self = this;
@@ -65,15 +69,20 @@ With just this!
 Quick Start
 ---
 
-0. Install django-knockout // TODO (not currently on pip)
-~~
+0. Install django-knockout // TODO (not currently on pip)  
+    via git (and then make sure the subfolder knockout is available to your PYTHONPATH)
+    ```bash
+    git clone github.com/AntycSolutions/django-knockout
+    ```
+    via pip
     ```python
     pip install django-knockout
     ```
-~~
+
 1. Add 'knockout' to your INSTALLED_APPS setting:
 
     ```python
+    # settings.py
     INSTALLED_APPS = (
       ...
       'knockout',
@@ -83,6 +92,7 @@ Quick Start
 2. Include knockout.js in your HTML:
 
     ```html
+    # template
     <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js'></script>
     // Optionally needed if you're using forms/formsets
     <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout-pre-rendered/0.5.0/knockout-pre-rendered.min.js'></script>
@@ -91,6 +101,7 @@ Quick Start
 4. Knockout your QuerySet:
 
     ```html
+    # template
     {% load knockout %}
     <script>
         {{ my_objects|knockout }}
@@ -100,6 +111,7 @@ Quick Start
 6. Loop over your bound data like so:
 
     ```html
+    # template
     <div id="myobjectviewmodel">
         <div data-bind="foreach: myobjects">
             My Name: <span data-bind="value: my_name"></span>
@@ -186,12 +198,51 @@ def knockout_fields(self):
     return ['id', 'my_name', 'my_number', ...]
 ```
 
-By default, it uses MyObject._meta.get_fields(). For computed properties, you can use python's __property__ function.
+By default, it uses MyObject._meta.get_fields(). For computed properties, you can use python's \__property__ function.
 
 Sorting
 ----------
 
-django-knockout provides some convenient methods for sorting your data. By default, it will use the object's 'id' field, but you can also define your own comparator like so:
+django-knockout provides some convenient methods for sorting your data (see below for changing the comparator): 
+
+```javascript
+    self.sortMyObjectsAsc = function() {
+        self.myobjects.sort(function(a, b) {
+            var a_comparator = a.id();
+            var b_comparator = b.id();
+            if (!a_comparator) { a_comparator = undefined; }
+            if (!b_comparator) { b_comparator = undefined; }
+            var result = a_comparator>b_comparator?-1:a_comparator<b_comparator?1:0;
+
+            sorted = true;
+
+            return result;
+        });
+    };
+
+    self.sortMyObjectsDesc = function() {
+        self.myobjects.sort(function(a, b) {
+            var a_comparator = a.id();
+            var b_comparator = b.id();
+            if (!a_comparator) { a_comparator = undefined; }
+            if (!b_comparator) { b_comparator = undefined; }
+            var result = a_comparator<b_comparator?-1:a_comparator>b_comparator?1:0;
+
+            sorted = true;
+
+            return result;
+        });
+    };
+```
+
+Include this in your template:
+
+```javascript
+<button data-bind='click: sortMyObjectsAsc'>Sort Asc</button>
+<button data-bind='click: sortMyObjectsDesc'>Sort Desc</button>
+```
+
+By default, it will use the object's 'id' field, but you can also define your own comparator like so:
 
 ```python
 def comparator(self):
