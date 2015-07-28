@@ -3,7 +3,7 @@ from django.views.generic.edit import UpdateView
 from django.forms.models import modelformset_factory
 from django.core.urlresolvers import reverse
 
-from app.forms import forms
+from app import forms
 from app import models
 
 
