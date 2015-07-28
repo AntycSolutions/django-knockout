@@ -47,10 +47,10 @@ def knockout(values, ignore_queryset=None):
 
 
 @register.filter
-def knockout_data(values):
+def knockout_data(values, data_variable=None):
     model_class, queryset = _get_model_queryset(values)
 
-    return ko.ko_data(model_class, queryset)
+    return ko.ko_data(model_class, queryset, data_variable=data_variable)
 
 
 @register.filter
@@ -60,26 +60,13 @@ def knockout_view_model(values):
     return ko.ko_view_model(model_class)
 
 
-@register.filter
-def knockout_bindings(values, args=None):
+@register.simple_tag
+def knockout_bindings(values, element_id=None, data_variable=None,
+                      ignore_data=False):
     _, model_class = _get_model(values)
 
-    if not args:
-        element_id = None
-        ignore_data = False
-    else:
-        if ',' in args:
-            args = args.split(',')
-            element_id = args[0]
-            if args[1] == 'ignore_data':
-                ignore_data = True
-            else:
-                raise Exception('Unknown argument.')
-        else:
-            element_id = args
-            ignore_data = False
-
-    return ko.ko_bindings(model_class, element_id, ignore_data)
+    return ko.ko_bindings(model_class, element_id=element_id,
+                          data_variable=data_variable, ignore_data=ignore_data)
 
 
 @register.filter
