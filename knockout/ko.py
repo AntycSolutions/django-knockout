@@ -137,10 +137,13 @@ def ko_view_model(model, knockout_model=None):
     return view_model_string
 
 
-def ko_bindings(model, element_id=None, ignore_data=False):
+def ko_bindings(model, element_id=None, data_variable=None, ignore_data=False):
     model_name = model.__name__
     view_model_string = model_name + "ViewModel"
-    model_data_string = model_name + "Data"
+    if data_variable:
+        model_data_string = data_variable
+    else:
+        model_data_string = model_name + "Data"
 
     model_bindings_string = render_to_string(
         "knockout/bindings.js",
@@ -236,7 +239,8 @@ def _model_many_to_many_data(obj, knockout_models, safe):
     return many_to_many_dict
 
 
-def ko_data(model, queryset, knockout_model=None, safe=False):
+def ko_data(model, queryset, knockout_model=None, data_variable=None,
+            safe=False):
     if not knockout_model:
         knockout_model = KnockoutModel(model)
     fields = knockout_model.fields
@@ -261,7 +265,10 @@ def ko_data(model, queryset, knockout_model=None, safe=False):
         model_data.append(all_dict)
 
     model_name = model.__name__
-    model_data_string = model_name + "Data"
+    if data_variable:
+        model_data_string = data_variable
+    else:
+        model_data_string = model_name + "Data"
     model_args = model_name.lower() + "s"
 
     dthandler = (
