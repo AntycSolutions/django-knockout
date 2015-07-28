@@ -62,7 +62,7 @@ ko.applyBindings(new MyObjectViewModel(), document.getElementById("myobjectviewm
 
 With just this!
 
-```django
+```html+django
 {# template #}
 {{ my_objects|knockout }}
 ```
