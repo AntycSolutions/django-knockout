@@ -35,8 +35,8 @@ var MyObjectData = {
 var MyObject = function (data) {
     var self = this;
 
-    self.my_number = ko.observable();
-    self.my_name = ko.observable();
+    self.my_number = ko.observable(data.my_number);
+    self.my_name = ko.observable(data.my_name);
 }
 
 var MyObjectViewModel = function(data) {
@@ -57,7 +57,7 @@ var MyObjectViewModel = function(data) {
     };
 }
 
-ko.applyBindings(new MyObjectViewModel(), document.getElementById("myobjectviewmodel"));
+ko.applyBindings(new MyObjectViewModel(MyObjectData), document.getElementById("myobjectviewmodel"));
 ```
 
 With just this!
