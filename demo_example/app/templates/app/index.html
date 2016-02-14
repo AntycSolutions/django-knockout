@@ -1,31 +1,29 @@
-{% load knockout %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head></head>
 <body>
 
-<div>
-    <a href="{% url 'persons' %}">Persons Objects</a>
-    {% if not person %}
-        Please create a person before using the UpdateView.
-    {% else  %}
-        <a href="{% url 'persons_form' person.pk %}">Persons Form</a>
-    {% endif %}
-    <a href="{% url 'persons_formset' %}">Persons Formset</a>
-</div>
-<br />
-<div>
-    <a href="{% url 'schedule' %}">Schedule Objects (ForeignKey)</a>
-</div>
-<br />
-<div>
-    <a href="{% url 'shopping' %}">Shopping List Objects (ManyToMany)</a>
-</div>
-<br />
-<div>
-    <a href="{% url 'multiple_models' %}">Multiple Models Objects</a>
-</div>
+    <div>
+        <a href="{% url 'persons' %}">Persons Objects</a>
+        {% if not person %}
+            Please create a person before using the UpdateView.
+        {% else  %}
+            <a href="{% url 'persons_form' person.pk %}">Persons Form</a>
+        {% endif %}
+        <a href="{% url 'persons_formset' %}">Persons Formset</a>
+    </div>
+    <br />
+    <div>
+        <a href="{% url 'schedule' %}">Schedule Objects (ForeignKey)</a>
+    </div>
+    <br />
+    <div>
+        <a href="{% url 'shopping' %}">Shopping List Objects (ManyToMany)</a>
+    </div>
+    <br />
+    <div>
+        <a href="{% url 'multiple_models' %}">Multiple Models Objects</a>
+    </div>
 
 </body>
 </html>

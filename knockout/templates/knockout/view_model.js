@@ -1,4 +1,5 @@
-{% load knockout %}
+{% load knockout_tags %}
+
 {{ model_string }}
 var {{ view_model_string }} = function(data) {
     var self = this;

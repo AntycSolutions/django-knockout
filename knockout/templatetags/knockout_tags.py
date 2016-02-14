@@ -1,13 +1,14 @@
+from django import template
+from django.db.models import query
+
 from knockout import ko
 
-from django.db.models.query import QuerySet
 
-from django import template
 register = template.Library()
 
 
 def _get_model_queryset(values):
-    if isinstance(values, (QuerySet, list)):
+    if isinstance(values, (query.QuerySet, list)):
         queryset = values
         model = values[0]
     else:
@@ -20,7 +21,7 @@ def _get_model_queryset(values):
 
 
 def _get_model(values):
-    if isinstance(values, (QuerySet, list)):
+    if isinstance(values, (query.QuerySet, list)):
         model = values[0]
     else:
         model = values
@@ -50,14 +51,22 @@ def knockout(values, ignore_queryset=None):
 def knockout_data(values, data_variable=None):
     model_class, queryset = _get_model_queryset(values)
 
-    return ko.ko_data(model_class, queryset, data_variable=data_variable)
+    data = ko.ko_data(model_class, queryset, data_variable=data_variable)
+
+    return data
 
 
-@register.filter
-def knockout_view_model(values):
+@register.simple_tag
+def knockout_view_model(
+    values, follow_fks=False, follow_m2ms=False, follow_reverse_fks=False
+        ):
     _, model_class = _get_model(values)
 
-    return ko.ko_view_model(model_class)
+    view_model = ko.ko_view_model(
+        model_class, None, follow_fks, follow_m2ms, follow_reverse_fks
+    )
+
+    return view_model
 
 
 @register.simple_tag
@@ -65,22 +74,30 @@ def knockout_bindings(values, element_id=None, data_variable=None,
                       ignore_data=False):
     _, model_class = _get_model(values)
 
-    return ko.ko_bindings(model_class, element_id=element_id,
-                          data_variable=data_variable, ignore_data=ignore_data)
+    bindings = ko.ko_bindings(
+        model_class, element_id=element_id,
+        data_variable=data_variable, ignore_data=ignore_data
+    )
+
+    return bindings
 
 
 @register.filter
 def knockout_model(values):
     model, _ = _get_model(values)
 
-    return ko.ko_model(model)
+    ko_model = ko.ko_model(model)
+
+    return ko_model
 
 
 @register.filter
 def knockout_list(values):
     model, _ = _get_model(values)
 
-    return ko.ko_list(model)
+    ko_list = ko.ko_list(model)
+
+    return ko_list
 
 
 # Helper templatetag, builds up html attributes
