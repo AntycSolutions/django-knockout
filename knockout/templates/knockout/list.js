@@ -12,6 +12,7 @@
     }
 
     self.add{{ model_name }} = function() {
+        // console.log('add {{ model_name }}');
         self.{{ model_args }}.push(new {{ model_name }}());
     };
 
@@ -61,12 +62,18 @@
         for (var i = 0; i < elems.length; ++i) {
             if (elems[i].status == 'added') {
                 var template = document.getElementById(empty_form_prefix);
+                template.style.display = 'none';
                 template.removeAttribute('id');
 
                 var prefix = elems[i].value.form_prefix();
                 if (!prefix) {
-                    prefix = empty_form_prefix.replace(/__prefix__/,
-                                                       total_form_count.value);
+                    if (typeof empty_prefix === 'undefined') {
+                        empty_prefix = '__prefix__';
+                    }
+                    var re = new RegExp(empty_prefix, "g");
+                    prefix = empty_form_prefix.replace(
+                        re, total_form_count.value
+                    );
                 }
 
                 var children = template.children;
@@ -75,10 +82,57 @@
                 if (!sorted) {
                     total_form_count.value = parseInt(total_form_count.value) + 1;
                 }
+
+                if (typeof self.afterAdd{{ model_name }}Callback === 'function') {
+                    self.afterAdd{{ model_name }}Callback(
+                        template, elems[i].value
+                    );
+                }
+                else {
+                    template.style.display = 'block';
+                }
+            }
+            else {
+                // console.log(elems[i].status);
             }
         }
 
         sorted = false;
+    };
+
+    self.afterAdd{{ model_name }}Test = function(element, index, data) {
+        if (element.nodeType !== 1) { return; }
+        // console.log('afterAdd {{ model_name }} Test');
+
+        element.style.display = 'none';
+
+        var prefix = data.form_prefix();
+        if (!prefix) {
+            if (typeof empty_prefix === 'undefined') {
+                empty_prefix = '__prefix__';
+            }
+            var re = new RegExp(empty_prefix, "g");
+            prefix = empty_form_prefix.replace(
+                re, total_form_count.value
+            );
+            data.form_prefix(prefix);
+        }
+
+        var children = element.children;
+        self._update_prefix(children, prefix);
+
+        if (!sorted) {
+            total_form_count.value = parseInt(total_form_count.value) + 1;
+        }
+
+        if (typeof self.afterAdd{{ model_name }}Callback === 'function') {
+            self.afterAdd{{ model_name }}Callback(
+                element, data
+            );
+        }
+        else {
+            element.style.display = 'block';
+        }
     };
 
     self._update_prefix = function(children, prefix) {
