@@ -5,9 +5,9 @@ django-knockout
 
 Forked from [django-knockout-modeler](https://github.com/Miserlou/django-knockout-modeler).
 
-Python 3.4  
-Django 1.8  
-Knockout 3.3  
+Python 2.7 or 3.4
+Django 1.8
+Knockout 3.3
 Knockout pre-rendered 0.5
 
 **django-knockout** turns this:
@@ -17,7 +17,7 @@ Knockout pre-rendered 0.5
 class MyObject(models.Model):
     my_number = models.IntegerField()
     my_name = models.CharField()
-    
+
 # views.py
 my_objects = MyObject.objects.all()
 ```
@@ -34,14 +34,14 @@ var MyObjectData = {
 
 var MyObject = function (data) {
     var self = this;
-    
+
     self.my_number = ko.observable();
     self.my_name = ko.observable();
 }
 
 var MyObjectViewModel = function(data) {
     var self = this;
-    
+
     self.myobjects = ko.observableArray(ko.utils.arrayMap(
         data.myobjects
         function(data) {
@@ -51,7 +51,7 @@ var MyObjectViewModel = function(data) {
     self.addMyObject = function() {
         self.myobjects.push(new MyObject());
     };
-    
+
     self.removeMyObject = function(data){
         self.myobjects.remove(data)
     };
@@ -70,7 +70,7 @@ With just this!
 Quick Start
 ---
 
-0. Install django-knockout // TODO (not currently on pip)  
+0. Install django-knockout // TODO (not currently on pip)
     via git (and then make sure the subfolder knockout is available to your PYTHONPATH)
     ```bash
     git clone github.com/AntycSolutions/django-knockout
@@ -187,7 +187,7 @@ class MyObject():
     ...
     def knockout_fields(self):
         return ['my_name', 'my_number', ...]
-        
+
 knockout_model = KnockoutModel(MyObject.__class__)
 
 ko_string = ko(MyObject.__class__, queryset, knockout_model)
@@ -208,7 +208,7 @@ By default, it uses MyObject._meta.get_fields(). For computed properties, you ca
 Sorting
 ----------
 
-django-knockout provides some convenient methods for sorting your data (see below for changing the comparator): 
+django-knockout provides some convenient methods for sorting your data (see below for changing the comparator):
 
 ```javascript
 self.sortMyObjectsAsc = function() {
