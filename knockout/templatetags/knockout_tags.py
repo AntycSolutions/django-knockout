@@ -8,9 +8,12 @@ register = template.Library()
 
 
 def _get_model_queryset(values):
-    if isinstance(values, (query.QuerySet, list)):
+    if isinstance(values, list):
         queryset = values
         model = values[0]
+    elif isinstance(values, query.QuerySet):
+        queryset = values
+        model = values.model
     else:
         queryset = [values]
         model = values
@@ -21,8 +24,10 @@ def _get_model_queryset(values):
 
 
 def _get_model(values):
-    if isinstance(values, (query.QuerySet, list)):
+    if isinstance(values, list):
         model = values[0]
+    elif isinstance(values, query.QuerySet):
+        model = values.model
     else:
         model = values
 
