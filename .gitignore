@@ -16,3 +16,8 @@ __pycache__
 # Django
 media/*
 static/*
+
+# Distribution / packaging
+dist/
+*.egg-info/
+
