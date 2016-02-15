@@ -3,12 +3,14 @@ django-knockout
 
 **[django-knockout](//github.com/AntycSolutions/django-knockout)** makes it super easy to use [knockout.js](//knockoutjs.com/) with your [Django](//www.djangoproject.com/) models. It's great for project with objects that have lots of different models, or models with lots of different fields, or both. It can be used in both prototyping complex applications and directly in the templates of simple ones. Supports forms and formsets via the [Knockout pre-rendered library](//github.com/ErikSchierboom/knockout-pre-rendered).
 
-Forked from [django-knockout-modeler](https://github.com/Miserlou/django-knockout-modeler).
+Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-modeler).
 
-Python 2.7 or 3.4
-Django 1.8
-Knockout 3.3
-Knockout pre-rendered 0.5
+### Requirements
+* [Python](python.org) 2.7 or 3.4  
+* [Django](djangoproject.com) 1.8  
+* [Knockout](knockoutjs.com) 3.3  
+Optional
+* [Knockout pre-rendered](//github.com/ErikSchierboom/knockout-pre-rendered) 0.5
 
 **django-knockout** turns this:
 
