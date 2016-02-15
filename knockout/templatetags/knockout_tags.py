@@ -11,14 +11,15 @@ def _get_model_queryset(values):
     if isinstance(values, list):
         queryset = values
         model = values[0]
+        model_class = model.__class__
     elif isinstance(values, query.QuerySet):
         queryset = values
         model = values.model
+        model_class = model
     else:
         queryset = [values]
         model = values
-
-    model_class = model.__class__
+        model_class = model.__class__
 
     return model_class, queryset
 
@@ -26,14 +27,15 @@ def _get_model_queryset(values):
 def _get_model(values):
     if isinstance(values, list):
         model = values[0]
+        model_class = model.__class__
     elif isinstance(values, query.QuerySet):
         model = values.model
+        model_class = model
     else:
         model = values
+        model_class = model.__class__
 
-    model_class = model.__class__
-
-    return model, model_class
+    return model_class
 
 
 # Accepts a QuerySet, list of objects, instance of a model, or a model class
@@ -65,7 +67,7 @@ def knockout_data(values, data_variable=None):
 def knockout_view_model(
     values, follow_fks=False, follow_m2ms=False, follow_reverse_fks=False
         ):
-    _, model_class = _get_model(values)
+    model_class = _get_model(values)
 
     view_model = ko.ko_view_model(
         model_class, None, follow_fks, follow_m2ms, follow_reverse_fks
@@ -77,7 +79,7 @@ def knockout_view_model(
 @register.simple_tag
 def knockout_bindings(values, element_id=None, data_variable=None,
                       ignore_data=False):
-    _, model_class = _get_model(values)
+    model_class = _get_model(values)
 
     bindings = ko.ko_bindings(
         model_class, element_id=element_id,
@@ -89,18 +91,18 @@ def knockout_bindings(values, element_id=None, data_variable=None,
 
 @register.filter
 def knockout_model(values):
-    model, _ = _get_model(values)
+    model_class = _get_model(values)
 
-    ko_model = ko.ko_model(model)
+    ko_model = ko.ko_model(model_class)
 
     return ko_model
 
 
 @register.filter
 def knockout_list(values):
-    model, _ = _get_model(values)
+    model_class = _get_model(values)
 
-    ko_list = ko.ko_list(model)
+    ko_list = ko.ko_list(model_class)
 
     return ko_list
 
