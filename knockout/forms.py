@@ -34,7 +34,7 @@ class KnockoutModelForm(forms.ModelForm):
             if widget_name in ['CheckboxInput']:
                 attr += "click: $root.clickChecked, checked: "
             elif widget_name in ['ClearableFileInput']:
-                pass
+                attr += "event: { change: "
             else:
                 attr += "value: "
 
@@ -42,5 +42,8 @@ class KnockoutModelForm(forms.ModelForm):
                 attr += knockout_field_names[field.name]
             else:
                 attr += field.name
+
+            if widget_name in ['ClearableFileInput']:
+                attr += "Change }"
 
             field.field.widget.attrs['data-bind'] = attr
