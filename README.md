@@ -6,9 +6,9 @@ django-knockout
 Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-modeler).
 
 ### Requirements
-* [Python](python.org) 2.7 or 3.4  
-* [Django](djangoproject.com) 1.8  
-* [Knockout](knockoutjs.com) 3.3  
+* [Python](python.org) 2.7 or 3.4
+* [Django](djangoproject.com) 1.8
+* [Knockout](knockoutjs.com) 3.3
 
 Optional
 * [Knockout pre-rendered](//github.com/ErikSchierboom/knockout-pre-rendered) 0.5
@@ -294,8 +294,3 @@ If you're using multiple QuerySets of the same type, you'll need to define a cus
 # and
 {% knockout_bindings my_objects data_variable='CustomMyObjectData' %}
 ```
-
-Issues
--------
-
-There's probably a lot more that can be done to improve this. Please file issues if you find them!
