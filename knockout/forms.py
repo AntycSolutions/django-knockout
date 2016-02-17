@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import formsets
 
 
 class KnockoutModelForm(forms.ModelForm):
@@ -47,3 +48,13 @@ class KnockoutModelForm(forms.ModelForm):
                 attr += "Change }"
 
             field.field.widget.attrs['data-bind'] = attr
+
+
+class KnockoutBaseInlineFormSet(forms.BaseInlineFormSet):
+    def add_fields(self, form, index):
+        super(KnockoutBaseInlineFormSet, self).add_fields(form, index)
+
+        attr = 'checked: DELETE'
+        delete_field = form.fields[formsets.DELETION_FIELD_NAME]
+        delete_field.widget.attrs['data-bind'] = attr
+        delete_field.widget.attrs['class'] = 'formset-delete'
