@@ -1,36 +1,23 @@
+import inspect
+
 from django import template
 from django.db.models import query
 
-from knockout import ko
+from knockout import ko, forms
 
 
 register = template.Library()
 
 
-def _get_model_queryset(values):
-    if isinstance(values, list):
-        queryset = values
-        model = values[0]
-        model_class = model.__class__
-    elif isinstance(values, query.QuerySet):
-        queryset = values
-        model = values.model
-        model_class = model
-    else:
-        queryset = [values]
-        model = values
-        model_class = model.__class__
-
-    return model_class, queryset
-
-
-def _get_model(values):
+def get_model_class(values):
     if isinstance(values, list):
         model = values[0]
         model_class = model.__class__
     elif isinstance(values, query.QuerySet):
         model = values.model
         model_class = model
+    elif inspect.isclass(values):
+        model_class = values
     else:
         model = values
         model_class = model.__class__
@@ -39,87 +26,74 @@ def _get_model(values):
 
 
 # Accepts a QuerySet, list of objects, instance of a model, or a model class
-@register.filter
-def knockout(values, ignore_queryset=None):
+@register.simple_tag
+def knockout(values):
     if not values:
-        raise Exception("Templatetag knockout requires an argument.")
+        raise Exception("knockout tag requires an argument.")
 
-    model_class, queryset = _get_model_queryset(values)
+    model_class = get_model_class(values)
 
-    if ignore_queryset == 'ignore_queryset':
-        template = ko.ko(model_class, None)
-    else:
-        template = ko.ko(model_class, queryset)
+    template = ko.ko(model_class)
 
     return template
 
 
-@register.filter
-def knockout_data(values, data_variable=None):
-    model_class, queryset = _get_model_queryset(values)
-
-    data = ko.ko_data(model_class, queryset, data_variable=data_variable)
-
-    return data
-
-
 @register.simple_tag
-def knockout_view_model(
-    values, follow_fks=False, follow_m2ms=False, follow_reverse_fks=False
-        ):
-    model_class = _get_model(values)
+def knockout_view_model(values):
+    if not values:
+        raise Exception("knockout_view_model tag requires an argument.")
 
-    view_model = ko.ko_view_model(
-        model_class, None, follow_fks, follow_m2ms, follow_reverse_fks
-    )
+    model_class = get_model_class(values)
+
+    view_model = ko.ko_view_model(model_class)
 
     return view_model
 
 
 @register.simple_tag
-def knockout_bindings(values, element_id=None, data_variable=None,
-                      ignore_data=False):
-    model_class = _get_model(values)
+def knockout_bindings(values, element_id=None):
+    if not values:
+        raise Exception("knockout_model tag requires an argument.")
 
-    bindings = ko.ko_bindings(
-        model_class, element_id=element_id,
-        data_variable=data_variable, ignore_data=ignore_data
-    )
+    model_class = get_model_class(values)
+
+    bindings = ko.ko_bindings(model_class, element_id=element_id)
 
     return bindings
 
 
-@register.filter
+@register.simple_tag
 def knockout_model(values):
-    model_class = _get_model(values)
+    if not values:
+        raise Exception("knockout_model tag requires an argument.")
+
+    model_class = get_model_class(values)
 
     ko_model = ko.ko_model(model_class)
 
     return ko_model
 
 
-@register.filter
+@register.simple_tag
 def knockout_list(values):
-    model_class = _get_model(values)
+    if not values:
+        raise Exception("knockout_list tag requires an argument.")
+
+    model_class = get_model_class(values)
 
     ko_list = ko.ko_list(model_class)
 
     return ko_list
 
 
-# Helper templatetag, builds up html attributes
+# Helper tag, renders data-bind attr
 @register.assignment_tag
-def data_bind(field, template=""):
+def data_bind(field):
+    if not field:
+        raise Exception("data_bind tag requires an argument.")
+
     data_bind = "data-bind: "
 
-    if template != 'template':
-        data_bind += "init, "
+    attr = forms.render_data_bind_attr(field, field.name)
 
-    if field.field.widget.__class__.__name__ in ['CheckboxInput']:
-        data_bind += "click: $root.clickChecked, checked: "
-    else:
-        data_bind += "value: "
-
-    data_bind += field.name
-
-    return data_bind
+    return data_bind + attr

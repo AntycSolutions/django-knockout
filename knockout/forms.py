@@ -1,5 +1,28 @@
 from django import forms
-from django.forms import formsets
+from django.forms import formsets, widgets
+
+
+def render_data_bind_attr(field, field_name, click_checked=True):
+    widget = field.field.widget
+    if isinstance(widget, widgets.CheckboxInput):
+        attr = ""
+        if click_checked:
+            attr += "click: clickChecked, "
+        attr += "checked: {}".format(field_name)
+    elif isinstance(widget, widgets.ClearableFileInput):
+        attr = (
+            "event: {{"
+                " change: function(data, event) {{"
+                    " if (typeof {field_name}Change === 'function') {{"
+                        " {field_name}Change(data, event);"
+                    " }}"
+                " }}"
+            " }}".format(field_name=field_name)
+        )
+    else:
+        attr = "value: {}".format(field_name)
+
+    return attr
 
 
 class KnockoutModelForm(forms.ModelForm):
@@ -17,35 +40,23 @@ class KnockoutModelForm(forms.ModelForm):
         else:
             knockout_exclude = []
 
-        if hasattr(self, 'knockout_init'):
-            knockout_init = self.knockout_init
+        if hasattr(self, 'click_checked'):
+            click_checked = self.click_checked
         else:
-            knockout_init = False
+            click_checked = True
 
         for field in self:
             if field.name in knockout_exclude:
                 continue
 
-            attr = ""
-
-            if knockout_init:
-                attr = "init, "
-
-            widget_name = field.field.widget.__class__.__name__
-            if widget_name in ['CheckboxInput']:
-                attr += "click: $root.clickChecked, checked: "
-            elif widget_name in ['ClearableFileInput']:
-                attr += "event: { change: "
-            else:
-                attr += "value: "
-
             if field.name in knockout_field_names:
-                attr += knockout_field_names[field.name]
+                field_name = knockout_field_names[field.name]
             else:
-                attr += field.name
+                field_name = field.name
 
-            if widget_name in ['ClearableFileInput']:
-                attr += "Change }"
+            attr = render_data_bind_attr(
+                field, field_name, click_checked=click_checked
+            )
 
             field.field.widget.attrs['data-bind'] = attr
 
