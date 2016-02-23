@@ -28,7 +28,7 @@ def get_model_class(values):
 # Accepts a QuerySet, list of objects, instance of a model, or a model class
 @register.simple_tag
 def knockout(values):
-    if not values:
+    if not values and not hasattr(values, 'model'):
         raise Exception("knockout tag requires an argument.")
 
     model_class = get_model_class(values)
@@ -40,7 +40,7 @@ def knockout(values):
 
 @register.simple_tag
 def knockout_view_model(values):
-    if not values:
+    if not values and not hasattr(values, 'model'):
         raise Exception("knockout_view_model tag requires an argument.")
 
     model_class = get_model_class(values)
@@ -52,7 +52,7 @@ def knockout_view_model(values):
 
 @register.simple_tag
 def knockout_bindings(values, element_id=None):
-    if not values:
+    if not values and not hasattr(values, 'model'):
         raise Exception("knockout_model tag requires an argument.")
 
     model_class = get_model_class(values)
@@ -64,7 +64,7 @@ def knockout_bindings(values, element_id=None):
 
 @register.simple_tag
 def knockout_model(values):
-    if not values:
+    if not values and not hasattr(values, 'model'):
         raise Exception("knockout_model tag requires an argument.")
 
     model_class = get_model_class(values)
@@ -76,7 +76,7 @@ def knockout_model(values):
 
 @register.simple_tag
 def knockout_list(values):
-    if not values:
+    if not values and not hasattr(values, 'model'):
         raise Exception("knockout_list tag requires an argument.")
 
     model_class = get_model_class(values)
