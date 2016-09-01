@@ -1,7 +1,7 @@
 {% load knockout_tags %}
 
 var {{ model_name }} = function() {
-    // console.log('new {{ model_name }}');
+    // console.log('{{ model_name }}');
     var self = this;
 
     ko.mapping.fromJS({{ model_name|lower }}_fields, {}, self);
