@@ -1,104 +1,130 @@
+{% extends 'app/base.html' %}
+
 {% load knockout_tags %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-debug.js'></script>
-    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout-pre-rendered/0.5.0/knockout-pre-rendered.min.js'></script>
-</head>
-<body>
+{% block content %}
 
-<h1>Django</h1>
+    <h1>Django</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for person in persons %}
-        <tr>
-            <td>{{ person.id }}</td>
-            <td>{{ person.first_name }}</td>
-            <td>{{ person.last_name }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <p>Static, requires reloading page for changes, has Django template tag access</p>
 
-<h1>Knockout</h1>
-
-<h2>Regular</h2>
-<div id="personviewmodel">
     <table>
         <thead>
             <tr>
                 <th>ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Remove</th>
             </tr>
         </thead>
-        <tbody data-bind="foreach: persons">
-            <tr>
-                <td><input data-bind="value: id" /></td>
-                <td><input data-bind='value: first_name, valueUpdate: "afterkeydown"' /></td>
-                <td><input data-bind="value: last_name" /></td>
-                <td><input data-bind="value: first_name" /></td>
-                <td><input data-bind="value: last_name" /></td>
-                <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
-            </tr>
-        </tbody>
-    </table>
-    Count: <span data-bind='text: persons().length'></span>
-    <button data-bind='click: addPerson'>Add a Person</button>
-    <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
-    <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
-</div>
-
-<h2>Pre-rendered</h2>
-<div id="prerendered">
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Remove</th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreachInit: { data: persons, createElement: createPerson }">
-            <tr data-template>
-                <td><input data-bind="value: id"></td>
-                <td><input data-bind="value: first_name"></td>
-                <td><input data-bind="value: last_name"></td>
-                <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
-            </tr>
+        <tbody>
             {% for person in persons %}
-            <tr data-init>
-                <td><input data-bind="init, value: id" value="{{ person.id }}"></td>
-                <td><input data-bind="init, value: first_name" value="{{ person.first_name }}"></td>
-                <td><input data-bind="init, value: last_name" value="{{ person.last_name }}"></td>
-                <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
+            <tr>
+                <td>{{ person.id }}</td>
+                <td>{{ person.first_name }}</td>
+                <td>{{ person.last_name }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    Count: <span data-bind='text: persons().length'></span>
-    <button data-bind='click: addPerson'>Add a Person</button>
-    <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
-    <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
-</div>
 
-<script>
-    {{ persons|knockout }} {# personviewmodel #}
-    {% knockout_bindings persons element_id="prerendered" ignore_data=False %}
-</script>
+    <h1>Knockout</h1>
 
-</body>
-</html>
+    <h2>Regular</h2>
+
+    <p>Dynamic, every change can easily be tracked, but no Django template tag access</p>
+
+    <div id="personviewmodel">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>First Name (Duplicate)</th>
+                    <th>Last Name (Duplicate)</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: persons">
+                <tr>
+                    <td><input data-bind="value: id" /></td>
+                    <td><input data-bind='value: first_name, valueUpdate: "afterkeydown"' /></td>
+                    <td><input data-bind="value: last_name" /></td>
+                    <td><input data-bind="value: first_name" /></td>
+                    <td><input data-bind="value: last_name" /></td>
+                    <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
+                </tr>
+            </tbody>
+        </table>
+        Count: <span data-bind='text: persons().length'></span>
+        <button data-bind='click: addPerson'>Add a Person</button>
+        <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
+        <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+    </div>
+
+    <h2>Pre-rendered</h2>
+
+    <p>Dynamic, every change can easily be tracked, and has access to Django template tags</p>
+
+    <div id="prerendered">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>First Name (Duplicate)</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreachInit: { data: persons, createElement: createPerson }">
+                <tr data-template>
+                    <td><input data-bind="value: id"></td>
+                    <td><input data-bind="value: first_name"></td>
+                    <td><input data-bind="value: last_name"></td>
+                    <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
+                </tr>
+                {% for person in persons %}
+                <tr data-init>
+                    <td><input data-bind="init, value: id" value="{{ person.id }}"></td>
+                    <td><input data-bind="init, value: first_name" value="{{ person.first_name }}"></td>
+                    <td><input data-bind="init, value: last_name" value="{{ person.last_name }}"></td>
+                    <td><input data-bind="value: first_name" /></td>
+                    <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        Count: <span data-bind='text: persons().length'></span>
+        <button data-bind='click: addPerson'>Add a Person</button>
+        <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
+        <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+    </div>
+
+    <script type="text/javascript">
+        {# can be utilized with django rest framework OPTIONS method via knockout/metadata.py #}
+        var person_fields = {
+            'id': null, 'first_name': null, 'last_name': null,
+        };
+
+        {% knockout persons %} {# personviewmodel #}
+        {% knockout_bindings persons element_id="prerendered" %}
+
+        {# can be utilized with django rest framework to get all persons via ajax #}
+        var persons = [
+            {% for person in persons %}
+                {
+                    id: "{{ person.id }}",
+                    first_name: "{{ person.first_name }}",
+                    last_name: "{{ person.last_name }}",
+                },
+            {% endfor %}
+        ];
+        var personviewmodel = ko.dataFor(
+            document.getElementById('personviewmodel')
+        );
+        persons_observable_array = ko.mapping.fromJS(persons);
+        personviewmodel.persons(persons_observable_array());
+    </script>
+
+{% endblock content %}

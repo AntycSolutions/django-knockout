@@ -12,12 +12,12 @@ def render_data_bind_attr(field, field_name, click_checked=True):
     elif isinstance(widget, widgets.ClearableFileInput):
         attr = (
             "event: {{"
-                " change: function(data, event) {{"
-                    " if (typeof {field_name}Change === 'function') {{"
-                        " {field_name}Change(data, event);"
-                    " }}"
-                " }}"
-            " }}".format(field_name=field_name)
+            "    change: function(data, event) {{"
+            "        if (typeof {field_name}Change === 'function') {{"
+            "            {field_name}Change(data, event);"
+            "        }}"
+            "    }}"
+            "}}".format(field_name=field_name)
         )
     else:
         attr = "value: {}".format(field_name)

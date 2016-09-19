@@ -1,6 +1,5 @@
 from django.views.generic import TemplateView
 from django.views.generic.edit import UpdateView
-from django.forms.models import modelformset_factory
 from django.core.urlresolvers import reverse
 
 from app import forms
