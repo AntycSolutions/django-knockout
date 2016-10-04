@@ -2,6 +2,8 @@
 
 {% load knockout_tags %}
 
+{% block title %}Persons Objects - {% endblock %}
+
 {% block content %}
 
     <h1>Django</h1>
@@ -27,7 +29,7 @@
         </tbody>
     </table>
 
-    <h1>Knockout</h1>
+    <h1>Django Knockout</h1>
 
     <h2>Regular</h2>
 
@@ -128,7 +130,7 @@
         personviewmodel.persons(persons_observable_array());
 
         {# prerendered via django templates ko #}
-        {% knockout_bindings persons element_id="prerendered" %}
+        {% knockout_bindings person_class element_id="prerendered" %}
     </script>
 
 {% endblock content %}

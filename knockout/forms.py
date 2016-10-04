@@ -3,14 +3,18 @@ from django.forms import formsets, widgets
 
 
 def render_data_bind_attr(field, field_name, click_checked=True):
+    attr = ""
+
+    if field.value():
+        attr += 'init, '
+
     widget = field.field.widget
     if isinstance(widget, widgets.CheckboxInput):
-        attr = ""
         if click_checked:
             attr += "click: clickChecked, "
         attr += "checked: {}".format(field_name)
     elif isinstance(widget, widgets.ClearableFileInput):
-        attr = (
+        attr += (
             "event: {{"
             "    change: function(data, event) {{"
             "        if (typeof {field_name}Change === 'function') {{"
@@ -20,7 +24,7 @@ def render_data_bind_attr(field, field_name, click_checked=True):
             "}}".format(field_name=field_name)
         )
     else:
-        attr = "value: {}".format(field_name)
+        attr += "value: {}".format(field_name)
 
     return attr
 

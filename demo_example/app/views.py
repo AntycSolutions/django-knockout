@@ -27,6 +27,9 @@ class Persons(TemplateView):
         persons = models.Person.objects.all()
         context['persons'] = persons
 
+        person_class = models.Person
+        context['person_class'] = person_class
+
         return context
 
 
@@ -40,7 +43,7 @@ class PersonsForm(UpdateView):
 
         context['PersonClass'] = models.Person
 
-        context['form2'] = forms.PersonForm(instance=self.object)
+        context['knockout_form'] = forms.PersonForm(instance=self.object)
 
         return context
 
