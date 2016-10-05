@@ -13,11 +13,6 @@ __pycache__
 # Apple
 .DS_Store
 
-# Django
-media/*
-static/*
-
 # Distribution / packaging
 dist/
 *.egg-info/
-
