@@ -108,12 +108,13 @@
 
     <script type="text/javascript">
         {# can be utilized with django rest framework OPTIONS method via knockout/metadata.py #}
+        {# required to create new persons #}
         var person_fields = {
             'id': null, 'first_name': null, 'last_name': null,
         };
 
         {# regular ko, data needs to be accessible by ajax or rendered into a js var #}
-        {% knockout persons %} {# personviewmodel #}
+        {% knockout persons %}
         {# can be utilized with django rest framework to get all persons via ajax #}
         var persons = [
             {% for person in persons %}
