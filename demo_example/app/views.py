@@ -89,6 +89,8 @@ class Shopping(TemplateView):
         )
         context['shopping_lists'] = shopping_lists
 
+        context['item_class'] = models.Item
+
         return context
 
 

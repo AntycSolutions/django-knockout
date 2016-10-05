@@ -71,6 +71,22 @@
     </div>
 
     <script type="text/javascript">
+        {# can be utilized with django rest framework OPTIONS method via knockout/metadata.py #}
+        {# required to create new tasks #}
+        var task_fields = {
+            id: null,
+            task: null,
+            day: {
+                day: null,
+            },
+            reminder: {
+                reminder: null,
+                reminder_type: {
+                    reminder_type: null,
+                },
+            },
+        };
+
         {# regular ko, data needs to be accessible by ajax or rendered into a js var #}
         {% knockout schedule %}
 

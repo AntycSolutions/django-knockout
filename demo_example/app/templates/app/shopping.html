@@ -7,11 +7,14 @@
 {% block content %}
 
     <h1>Django</h1>
+
+    <p>Static</p>
+
     <table>
         <thead>
             <tr>
-                <th>Shopping List ID</th>
-                <th>Shopping List Name</th>
+                <th>ID</th>
+                <th>Name</th>
                 <th>Items</th>
             </tr>
         </thead>
@@ -24,12 +27,14 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Item Name</th>
+                                <th>ID</th>
+                                <th>Name</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for item in shopping_list.items.all %}
                             <tr>
+                                <td>{{ item.id }}</td>
                                 <td>{{ item.name }}</td>
                             </tr>
                             {% endfor %}
@@ -40,16 +45,20 @@
             {% endfor %}
         </tbody>
     </table>
-    <h1>Knockout</h1>
+
+    <h1>Django Knockout</h1>
+
+    <p>Dynamic</p>
+
     <div id="shoppingviewmodel">
         <table>
             <thead>
                 <tr>
-                    <th>Shopping List ID</th>
+                    <th>ID</th>
                     <th>Name</th>
                     <th>Items</th>
-                    <th>Name</th>
-                    <th>Remove</th>
+                    <th>Name (Duplicate)</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: shoppings">
@@ -60,10 +69,10 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Item ID</th>
-                                    <th>Item Name</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
                                     <th>Description</th>
-                                    <th>Remove</th>
+                                    <!-- <th></th> -->
                                 </tr>
                             </thead>
                             <tbody data-bind="foreach: items">
@@ -71,14 +80,11 @@
                                     <td><input data-bind="value: id" /></td>
                                     <td><input data-bind="value: name" /></td>
                                     <td><input data-bind="value: description.description" /></td>
-                                    <td><button data-bind='click: $parent.removeItem'>Remove an Item</button></td>
+                                    <!-- <td><button data-bind='click: $parent.removeItem'>Remove an Item</button></td> -->
                                 </tr>
                             </tbody>
                         </table>
                         Count: <span data-bind='text: items().length'></span>
-                        <button data-bind='click: addItem'>Add an Item</button>
-                        <button data-bind='click: sortItemsAsc'>Sort Asc</button>
-                        <button data-bind='click: sortItemsDesc'>Sort Desc</button>
                     </td>
                     <td><input data-bind="value: name" /></td>
                     <td><button data-bind='click: $root.removeShopping'>Remove a Shopping List</button></td>
@@ -86,13 +92,49 @@
             </tbody>
         </table>
         Count: <span data-bind='text: shoppings().length'></span>
-        <button data-bind='click: addShopping'>Add a Shopping List</button>
+        <!-- <button data-bind='click: addShopping'>Add a Shopping List</button> -->
+        {# ### TODO: implement ManyToMany support ### #}
         <button data-bind='click: sortShoppingsAsc'>Sort Asc</button>
         <button data-bind='click: sortShoppingsDesc'>Sort Desc</button>
     </div>
 
     <script type="text/javascript">
-        {{ shopping_lists|knockout }}
+        {# can be utilized with django rest framework OPTIONS method via knockout/metadata.py #}
+        {# required to create new shopping lists #}
+        var shopping_fields = {
+            id: null,
+            name: null,
+            items: [], {# ### TODO: implement ManyToMany ### #}
+        };
+
+        {% knockout shopping_lists %}
+
+        {# can be utilized with django rest framework to get all persons via ajax #}
+        var shoppings = [
+            {% for shopping_list in shopping_lists %}
+                {
+                    id: '{{ shopping_list.id }}',
+                    name: '{{ shopping_list.name }}',
+                    items: [
+                        {% for item in shopping_list.items.all %}
+                            {
+                                id: '{{ item.id }}',
+                                name: '{{ item.name }}',
+                                description: {
+                                    description:
+                                        '{{ item.description.description }}',
+                                },
+                            },
+                        {% endfor %}
+                    ],
+                },
+            {% endfor %}
+        ];
+        var shoppingviewmodel = ko.dataFor(
+            document.getElementById('shoppingviewmodel')
+        );
+        var shoppings_observable_array = ko.mapping.fromJS(shoppings);
+        shoppingviewmodel.shoppings(shoppings_observable_array());
     </script>
 
 {% endblock content %}
