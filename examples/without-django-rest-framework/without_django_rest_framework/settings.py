@@ -1,4 +1,4 @@
-# demo_example settings
+# without_django_rest_framework settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -39,7 +39,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'demo_example.urls'
+ROOT_URLCONF = 'without_django_rest_framework.urls'
 
 TEMPLATES = [
     {
@@ -57,7 +57,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'demo_example.wsgi.application'
+WSGI_APPLICATION = 'without_django_rest_framework.wsgi.application'
 
 
 # Database
