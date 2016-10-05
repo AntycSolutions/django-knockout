@@ -43,8 +43,7 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>First Name (Duplicate)</th>
-                    <th>Last Name (Duplicate)</th>
-                    <th>Remove</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: persons">
@@ -53,15 +52,16 @@
                     <td><input data-bind='value: first_name, valueUpdate: "afterkeydown"' /></td>
                     <td><input data-bind="value: last_name" /></td>
                     <td><input data-bind="value: first_name" /></td>
-                    <td><input data-bind="value: last_name" /></td>
                     <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
                 </tr>
             </tbody>
         </table>
-        Count: <span data-bind='text: persons().length'></span>
-        <button data-bind='click: addPerson'>Add a Person</button>
-        <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
-        <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+        <p>
+            Count: <span data-bind='text: persons().length'></span>
+            <button data-bind='click: addPerson'>Add a Person</button>
+            <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
+            <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+        </p>
     </div>
 
     <h2>Pre-rendered</h2>
@@ -76,8 +76,7 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>First Name (Duplicate)</th>
-                    <th>Last Name (Duplicate)</th>
-                    <th>Remove</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreachInit: { data: persons, createElement: createPerson }">
@@ -85,6 +84,7 @@
                     <td><input data-bind="value: id"></td>
                     <td><input data-bind="value: first_name"></td>
                     <td><input data-bind="value: last_name"></td>
+                    <td><input data-bind="value: first_name"></td>
                     <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
                 </tr>
                 {% for person in persons %}
@@ -93,16 +93,17 @@
                     <td><input data-bind="init, value: first_name" value="{{ person.first_name }}"></td>
                     <td><input data-bind="init, value: last_name" value="{{ person.last_name }}"></td>
                     <td><input data-bind="value: first_name" /></td>
-                    <td><input data-bind="value: last_name" /></td>
                     <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        Count: <span data-bind='text: persons().length'></span>
-        <button data-bind='click: addPerson'>Add a Person</button>
-        <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
-        <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+        <p>
+            Count: <span data-bind='text: persons().length'></span>
+            <button data-bind='click: addPerson'>Add a Person</button>
+            <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
+            <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+        </p>
     </div>
 
     <script type="text/javascript">

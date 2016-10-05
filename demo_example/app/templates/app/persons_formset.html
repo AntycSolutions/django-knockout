@@ -6,6 +6,7 @@
 {% block content %}
 
     <h1>Knockout</h1>
+
     <div id="personviewmodel">
         <form method="POST">
             {% csrf_token %}
@@ -18,12 +19,10 @@
                         {% if not field.is_hidden %}
                             {{ field.label_tag }}
                         {% endif %}
-                        {% data_bind field 'template' as data_bind %}
+                        {% data_bind field as data_bind %}
                         {{ field|add_css:data_bind }}
-                        {# remove #}{% if field.name == 'first_name' %}
-                            <input data-bind="value: first_name">
-                        {% endif %}
                     {% endfor %}
+                    First Name (Duplicate): <input data-bind="value: first_name">
                     <input type="hidden" data-bind="value: form_prefix">
                 </div>
                 {% for form in formset %}
@@ -36,27 +35,38 @@
                             {% endif %}
                             {% data_bind field as data_bind %}
                             {{ field|add_css:data_bind }}
-                            {# remove #}{% if field.name == 'first_name' %}
-                                <input data-bind="value: first_name">
-                            {% endif %}
                         {% endfor %}
+                        First Name (Duplicate): <input data-bind="value: first_name">
                         <input type="hidden" data-bind="init, value: form_prefix" value="{{ form.prefix }}">
                     </div>
                 {% endfor %}
             </div>
-            Count: <span data-bind='text: persons().length'></span>
-            <button data-bind='click: addPerson'>Add a Person</button>
-            <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
-            <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
-            <br />
-            <button type="submit">Submit</button>
+            <p>
+                Count: <span data-bind='text: persons().length'></span>
+                <button data-bind='click: addPerson'>Add a Person</button>
+                <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
+                <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+            </p>
+            <p>
+                <button type="submit">Submit</button>
+            </p>
         </form>
     </div>
 
-    <script>
-        var total_form_count = document.getElementById('id_' + '{{ formset.get_default_prefix }}' + '-TOTAL_FORMS');
+    <script type="text/javascript">
+        var total_form_count = document.getElementById(
+            'id_' + '{{ formset.get_default_prefix }}' + '-TOTAL_FORMS'
+        );
         var empty_form_prefix = "{{ formset.empty_form.prefix }}";
-        {{ object|knockout:"ignore_queryset" }}
+
+        {# can be utilized with django rest framework OPTIONS method via knockout/metadata.py #}
+        var person_fields = {
+            id: null,
+            first_name: null,
+            last_name: null,
+        };
+
+        {% knockout object %}
     </script>
 
 {% endblock content %}

@@ -42,7 +42,9 @@
                         {{ field|add_css:data_bind }}
                     </p>
                 {% endfor %}
-                First Name (Duplicate): <input data-bind="value: first_name">
+                <p>
+                    First Name (Duplicate): <input data-bind="value: first_name">
+                </p>
             </div>
             <button type="submit">Submit</button>
         </form>
@@ -58,7 +60,9 @@
             <div data-template></div>
             <div data-init>
                 {{ knockout_form.as_p }}
-                First Name (Duplicate): <input data-bind="value: first_name">
+                <p>
+                    First Name (Duplicate): <input data-bind="value: first_name">
+                </p>
             </div>
             <button type="submit">Submit</button>
         </form>
