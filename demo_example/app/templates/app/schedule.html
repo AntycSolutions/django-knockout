@@ -1,37 +1,12 @@
+{% extends 'app/base.html' %}
+
 {% load knockout_tags %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js'></script>
-</head>
-<body>
+{% block title %}Schedule Objects (ForeignKey) - {% endblock %}
 
-<h1>Django</h1>
-<table>
-    <thead>
-        <tr>
-            <th>Task ID</th>
-            <th>Task</th>
-            <th>Day</th>
-            <th>Reminder</th>
-            <th>Reminder Type</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for task in schedule %}
-        <tr>
-            <td>{{ task.id }}</td>
-            <td>{{ task.task }}</td>
-            <td>{{ task.day.day }}</td>
-            <td>{{ task.reminder.reminder }}</td>
-            <td>{{ task.reminder.reminder_type.reminder_type }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<h1>Knockout</h1>
-<div id="taskviewmodel">
+{% block content %}
+
+    <h1>Django</h1>
     <table>
         <thead>
             <tr>
@@ -40,32 +15,56 @@
                 <th>Day</th>
                 <th>Reminder</th>
                 <th>Reminder Type</th>
-                <th>Task</th>
-                <th>Day</th>
-                <th>Remove</th>
             </tr>
         </thead>
-        <tbody data-bind="foreach: tasks">
+        <tbody>
+            {% for task in schedule %}
             <tr>
-                <td><input data-bind="value: id" /></td>
-                <td><input data-bind='value: task, valueUpdate: "afterkeydown"' /></td>
-                <td><input data-bind="value: day.day" /></td>
-                <td><input data-bind="value: reminder.reminder" /></td>
-                <td><input data-bind="value: reminder.reminder_type.reminder_type" /></td>
-                <td><input data-bind="value: task" /></td>
-                <td><input data-bind="value: day.day" /></td>
-                <td><button data-bind='click: $root.removeTask'>Remove a Task</button></td>
+                <td>{{ task.id }}</td>
+                <td>{{ task.task }}</td>
+                <td>{{ task.day.day }}</td>
+                <td>{{ task.reminder.reminder }}</td>
+                <td>{{ task.reminder.reminder_type.reminder_type }}</td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
-    Count: <span data-bind='text: tasks().length'></span>
-    <button data-bind='click: addTask'>Add a Task</button>
-    <button data-bind='click: sortTasksAsc'>Sort Asc</button>
-    <button data-bind='click: sortTasksDesc'>Sort Desc</button>
-</div>
-<script>
-    {{ schedule|knockout }}
-</script>
+    <h1>Knockout</h1>
+    <div id="taskviewmodel">
+        <table>
+            <thead>
+                <tr>
+                    <th>Task ID</th>
+                    <th>Task</th>
+                    <th>Day</th>
+                    <th>Reminder</th>
+                    <th>Reminder Type</th>
+                    <th>Task</th>
+                    <th>Day</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: tasks">
+                <tr>
+                    <td><input data-bind="value: id" /></td>
+                    <td><input data-bind='value: task, valueUpdate: "afterkeydown"' /></td>
+                    <td><input data-bind="value: day.day" /></td>
+                    <td><input data-bind="value: reminder.reminder" /></td>
+                    <td><input data-bind="value: reminder.reminder_type.reminder_type" /></td>
+                    <td><input data-bind="value: task" /></td>
+                    <td><input data-bind="value: day.day" /></td>
+                    <td><button data-bind='click: $root.removeTask'>Remove a Task</button></td>
+                </tr>
+            </tbody>
+        </table>
+        Count: <span data-bind='text: tasks().length'></span>
+        <button data-bind='click: addTask'>Add a Task</button>
+        <button data-bind='click: sortTasksAsc'>Sort Asc</button>
+        <button data-bind='click: sortTasksDesc'>Sort Desc</button>
+    </div>
 
-</body>
-</html>
+    <script type="text/javascript">
+        {{ schedule|knockout }}
+    </script>
+
+{% endblock content %}
