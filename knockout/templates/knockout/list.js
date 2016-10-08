@@ -1,34 +1,34 @@
 
     self.{{ model_list }} = ko.observableArray();
 
-    self.add{{ model_name }} = function(data) {
-        // console.log('add{{ model_name }}');
-        self.{{ model_list }}.push(new {{ model_name }}(data));
+    self.add{{ view_model_class }} = function(data) {
+        // console.log('add{{ view_model_class }}');
+        self.{{ model_list }}.push(new {{ view_model_class }}(data));
     };
 
-    self.create{{ model_name }} = function(data) {
-        // console.log('create{{ model_name }}');
-        return new {{ model_name }}(data);
+    self.create{{ view_model_class }} = function(data) {
+        // console.log('create{{ view_model_class }}');
+        return new {{ view_model_class }}(data);
     };
 
-    self.remove{{ model_name }} = function(data) {
-        // console.log('remove{{ model_name }}');
+    self.remove{{ view_model_class }} = function(data) {
+        // console.log('remove{{ view_model_class }}');
         self.{{ model_list }}.remove(data);
     };
 
-    self.destroy{{ model_name }} = function(data) {
-        // console.log('destroy{{ model_name }}');
+    self.destroy{{ view_model_class }} = function(data) {
+        // console.log('destroy{{ view_model_class }}');
         self.{{ model_list }}.destroy(data);
     };
 
-    self.delete{{ model_name }} = function(data) {
-        // console.log('delete{{ model_name }}');
+    self.delete{{ view_model_class }} = function(data) {
+        // console.log('delete{{ view_model_class }}');
         var index = self.{{ model_list }}.indexOf(data);
         self.{{ model_list }}()[index].DELETE(true);
     }
 
-    self.sort{{ model_name }}sAsc = function() {
-        // console.log('sort{{ model_name }}sAsc');
+    self.sort{{ view_model_class }}sAsc = function() {
+        // console.log('sort{{ view_model_class }}sAsc');
         self.{{ model_list }}.sort(function(a, b) {
             var a_comparator = a.{{ comparator }}();
             var b_comparator = b.{{ comparator }}();
@@ -40,8 +40,8 @@
         });
     };
 
-    self.sort{{ model_name }}sDesc = function() {
-        // console.log('sort{{ model_name }}sDesc');
+    self.sort{{ view_model_class }}sDesc = function() {
+        // console.log('sort{{ view_model_class }}sDesc');
         self.{{ model_list }}.sort(function(a, b) {
             var a_comparator = a.{{ comparator }}();
             var b_comparator = b.{{ comparator }}();
@@ -53,9 +53,9 @@
         });
     };
 
-    self.afterAdd{{ model_name }} = function(element, index, data) {
+    self.afterAdd{{ view_model_class }} = function(element, index, data) {
         if (element.nodeType !== 1) { return; }
-        // console.log('afterAdd{{ model_name }}');
+        // console.log('afterAdd{{ view_model_class }}');
 
         element.style.display = 'none';
 
@@ -67,8 +67,11 @@
         total_form_count.value = parseInt(total_form_count.value) + 1;
         data.form_prefix(prefix);
 
-        if (typeof self.afterAdd{{ model_name }}Callback === 'function') {
-            self.afterAdd{{ model_name }}Callback(element, index, data);
+        function_exists = (
+            typeof self.afterAdd{{ view_model_class }}Callback === 'function'
+        );
+        if (function_exists) {
+            self.afterAdd{{ view_model_class }}Callback(element, index, data);
         }
         else {
             element.style.display = 'block';

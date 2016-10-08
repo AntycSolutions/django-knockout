@@ -27,13 +27,13 @@
     {% endif %}
 {% endif %}
 
-var {{ model_name }} = function(data) {
-    // console.log('{{ model_name }}');
+var {{ view_model_class }} = function(data) {
+    // console.log('{{ view_model_class }}');
     var self = this;
 
     var no_data = (
         typeof data === 'undefined' ||
-        data instanceof {{ model_name }}ViewModel
+        data instanceof {{ list_view_model_class }}
     );
     if (no_data) {
         if (typeof {{ model_fields_var }} === 'undefined') {
@@ -52,4 +52,4 @@ var {{ model_name }} = function(data) {
 
     self.form_prefix = ko.observable();
     self.DELETE = ko.observable();
-} // {{ model_name }}
+} // {{ view_model_class }}

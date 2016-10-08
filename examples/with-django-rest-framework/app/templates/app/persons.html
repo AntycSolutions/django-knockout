@@ -35,7 +35,7 @@
 
     <p>Dynamic, every change can easily be tracked, but no Django template tag access</p>
 
-    <div id="personviewmodel">
+    <div id="personlistviewmodel">
         <table>
             <thead>
                 <tr>
@@ -52,15 +52,15 @@
                     <td><input data-bind='value: first_name, valueUpdate: "afterkeydown"' /></td>
                     <td><input data-bind="value: last_name" /></td>
                     <td><input data-bind="value: first_name" /></td>
-                    <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
+                    <td><button data-bind='click: $root.removePersonViewModel'>Remove a Person</button></td>
                 </tr>
             </tbody>
         </table>
         <p>
             Count: <span data-bind='text: persons().length'></span>
-            <button data-bind='click: addPerson'>Add a Person</button>
-            <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
-            <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+            <button data-bind='click: addPersonViewModel'>Add a Person</button>
+            <button data-bind='click: sortPersonViewModelsAsc'>Sort Asc</button>
+            <button data-bind='click: sortPersonViewModelsDesc'>Sort Desc</button>
         </p>
     </div>
 

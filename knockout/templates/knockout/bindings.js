@@ -1,5 +1,5 @@
 
-var {{ view_model_object }} = new {{ view_model_class }}();
+var {{ list_view_model_object }} = new {{ list_view_model_class }}();
 
 {% if ajax_data %}
     {% if jquery %}
@@ -9,7 +9,7 @@ var {{ view_model_object }} = new {{ view_model_class }}();
                 var {{ model_list }}_observable_array = ko.mapping.fromJS(
                     data
                 );
-                {{ view_model_object }}.{{ model_list }}(
+                {{ list_view_model_object }}.{{ model_list }}(
                     {{ model_list }}_observable_array()
                 );
             }
@@ -24,7 +24,7 @@ var {{ view_model_object }} = new {{ view_model_class }}();
                 var {{ model_list }}_observable_array = ko.mapping.fromJS(
                     data
                 );
-                {{ view_model_object }}.{{ model_list }}(
+                {{ list_view_model_object }}.{{ model_list }}(
                     {{ model_list }}_observable_array()
                 );
             }
@@ -36,12 +36,12 @@ var {{ view_model_object }} = new {{ view_model_class }}();
 function ko_bind() {
     ko.applyBindings(
         {# Fix race condition when calling bindings multiple times #}
-        {{ view_model_object }},
+        {{ list_view_model_object }},
         document.getElementById(
             {% if element_id %}
                 "{{ element_id }}"
             {% else %}
-                "{{ view_model_object }}"
+                "{{ list_view_model_object }}"
             {% endif %}
         )
     );

@@ -33,9 +33,9 @@ def knockout(context, values, url=None):
 
     model_class = _get_model_class(values)
 
-    template = ko.ko(model_class, context=context, url=url)
+    ko_string = ko.ko(model_class, context=context, url=url)
 
-    return template
+    return ko_string
 
 
 @register.simple_tag(takes_context=True)
@@ -45,9 +45,11 @@ def knockout_list_view_model(context, values, url=None):
 
     model_class = _get_model_class(values)
 
-    view_model = ko.ko_list_view_model(model_class, context=context, url=url)
+    list_view_model_string = ko.ko_list_view_model(
+        model_class, context=context, url=url
+    )
 
-    return view_model
+    return list_view_model_string
 
 
 @register.simple_tag(takes_context=True)
@@ -57,11 +59,11 @@ def knockout_bindings(context, values, element_id=None, url=None):
 
     model_class = _get_model_class(values)
 
-    bindings = ko.ko_bindings(
+    bindings_string = ko.ko_bindings(
         model_class, element_id=element_id, context=context, url=url
     )
 
-    return bindings
+    return bindings_string
 
 
 @register.simple_tag(takes_context=True)
@@ -71,9 +73,9 @@ def knockout_view_model(context, values, url=None):
 
     model_class = _get_model_class(values)
 
-    ko_model = ko.ko_view_model(model_class, context=context, url=url)
+    view_model_string = ko.ko_view_model(model_class, context=context, url=url)
 
-    return ko_model
+    return view_model_string
 
 
 @register.simple_tag
@@ -83,9 +85,9 @@ def knockout_list(values):
 
     model_class = _get_model_class(values)
 
-    ko_list = ko.ko_list(model_class)
+    list_string = ko.ko_list(model_class)
 
-    return ko_list
+    return list_string
 
 
 # Helper tag, renders data-bind attr required by knockout

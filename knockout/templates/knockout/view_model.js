@@ -1,8 +1,8 @@
 
-{{ model_string }}
+{{ view_model_string }}
 
-var {{ view_model_class }} = function(data) {
+var {{ list_view_model_class }} = function(data) {
     var self = this;
 
-	{{ model_list_string }}
-} // {{ view_model_class }}
+	{{ list_string }}
+} // {{ list_view_model_class }}
