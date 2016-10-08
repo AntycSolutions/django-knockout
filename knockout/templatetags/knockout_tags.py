@@ -26,50 +26,52 @@ def get_model_class(values):
 
 
 # Accepts a QuerySet, list of objects, instance of a model, or a model class
-@register.simple_tag
-def knockout(values):
+@register.simple_tag(takes_context=True)
+def knockout(context, values, url=None):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout tag requires an argument.")
 
     model_class = get_model_class(values)
 
-    template = ko.ko(model_class)
+    template = ko.ko(model_class, context=context, url=url)
 
     return template
 
 
-@register.simple_tag
-def knockout_view_model(values):
+@register.simple_tag(takes_context=True)
+def knockout_view_model(context, values, url=None):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_view_model tag requires an argument.")
 
     model_class = get_model_class(values)
 
-    view_model = ko.ko_view_model(model_class)
+    view_model = ko.ko_view_model(model_class, context=context, url=url)
 
     return view_model
 
 
-@register.simple_tag
-def knockout_bindings(values, element_id=None):
+@register.simple_tag(takes_context=True)
+def knockout_bindings(context, values, element_id=None, url=None):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_model tag requires an argument.")
 
     model_class = get_model_class(values)
 
-    bindings = ko.ko_bindings(model_class, element_id=element_id)
+    bindings = ko.ko_bindings(
+        model_class, element_id=element_id, context=context, url=url
+    )
 
     return bindings
 
 
-@register.simple_tag
-def knockout_model(values):
+@register.simple_tag(takes_context=True)
+def knockout_model(context, values, url=None):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_model tag requires an argument.")
 
     model_class = get_model_class(values)
 
-    ko_model = ko.ko_model(model_class)
+    ko_model = ko.ko_model(model_class, context=context, url=url)
 
     return ko_model
 
