@@ -1,0 +1,71 @@
+{% extends 'app/base.html' %}
+
+{% load knockout_tags %}
+
+{% block title %}Persons Objects - {% endblock %}
+
+{% block content %}
+
+    <h1>Django</h1>
+
+    <p>Static, requires reloading page for changes</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for person in persons %}
+            <tr>
+                <td>{{ person.id }}</td>
+                <td>{{ person.first_name }}</td>
+                <td>{{ person.last_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Django Knockout</h1>
+
+    <h2>Regular</h2>
+
+    <p>Dynamic, every change can easily be tracked, but no Django template tag access</p>
+
+    <div id="personviewmodel">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>First Name (Duplicate)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: persons">
+                <tr>
+                    <td><input data-bind="value: id" /></td>
+                    <td><input data-bind='value: first_name, valueUpdate: "afterkeydown"' /></td>
+                    <td><input data-bind="value: last_name" /></td>
+                    <td><input data-bind="value: first_name" /></td>
+                    <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            Count: <span data-bind='text: persons().length'></span>
+            <button data-bind='click: addPerson'>Add a Person</button>
+            <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
+            <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+        </p>
+    </div>
+
+    <script type="text/javascript">
+        {% knockout person_class %}
+    </script>
+
+{% endblock content %}

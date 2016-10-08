@@ -77,3 +77,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+
+
+# Project settings
+
+DJANGO_KNOCKOUT = {
+    'disable_ajax_data': True,
+    'disable_ajax_options': True,
+}

@@ -82,7 +82,7 @@
             <tbody data-bind="foreachInit: { data: persons, createElement: createPerson }">
                 <tr data-template>
                     <td><input data-bind="value: id"></td>
-                    <td><input data-bind="value: first_name"></td>
+                    <td><input data-bind="value: first_name, valueUpdate: 'afterkeydown'"></td>
                     <td><input data-bind="value: last_name"></td>
                     <td><input data-bind="value: first_name"></td>
                     <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
@@ -90,7 +90,7 @@
                 {% for person in persons %}
                 <tr data-init>
                     <td><input data-bind="init, value: id" value="{{ person.id }}"></td>
-                    <td><input data-bind="init, value: first_name" value="{{ person.first_name }}"></td>
+                    <td><input data-bind="init, value: first_name, valueUpdate: 'afterkeydown'" value="{{ person.first_name }}"></td>
                     <td><input data-bind="init, value: last_name" value="{{ person.last_name }}"></td>
                     <td><input data-bind="value: first_name" /></td>
                     <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>

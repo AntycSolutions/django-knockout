@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}{% endblock %}Django Knockout</title>
+
+        <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-debug.js'></script>
+        <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.js'></script>
+        <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout-pre-rendered/0.8.0/knockout-pre-rendered.js'></script>
+        <script type='text/javascript' src='https://code.jquery.com/jquery-3.1.1.js'></script>
+
+    </head>
+    <body>
+        {% block content %}{% endblock %}
+    </body>
+</html>

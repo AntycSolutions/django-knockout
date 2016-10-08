@@ -38,6 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'knockout',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
