@@ -45,7 +45,7 @@ def _get_url(context, model_name):
     return url
 
 
-def ko_model(model_class, context=None, url=None):
+def ko_view_model(model_class, context=None, url=None):
     if not inspect.isclass(model_class):
         raise Exception('ko_model function requires a class')
 
@@ -73,7 +73,7 @@ def ko_model(model_class, context=None, url=None):
     return model_string
 
 
-def ko_view_model(model_class, context=None, url=None):
+def ko_list_view_model(model_class, context=None, url=None):
     if not inspect.isclass(model_class):
         raise Exception('ko_view_model function requires a class')
 
@@ -81,7 +81,7 @@ def ko_view_model(model_class, context=None, url=None):
     view_model_class = model_name + "ViewModel"
 
     model_list_string = ko_list(model_class)
-    model_string = ko_model(model_class, context=context, url=url)
+    model_string = ko_view_model(model_class, context=context, url=url)
 
     view_model_string = render_to_string(
         "knockout/view_model.js",
@@ -131,7 +131,9 @@ def ko(model_class, context=None, url=None):
     if not inspect.isclass(model_class):
         raise Exception('ko function requires a class')
 
-    ko_view_model_string = ko_view_model(model_class, context=context, url=url)
+    ko_view_model_string = ko_list_view_model(
+        model_class, context=context, url=url
+    )
     ko_bindings_string = ko_bindings(model_class, context=context, url=url)
 
     ko_string = ko_view_model_string + ko_bindings_string

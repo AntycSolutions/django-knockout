@@ -9,7 +9,7 @@ from knockout import ko, forms
 register = template.Library()
 
 
-def get_model_class(values):
+def _get_model_class(values):
     if isinstance(values, list):
         model = values[0]
         model_class = model.__class__
@@ -31,7 +31,7 @@ def knockout(context, values, url=None):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout tag requires an argument.")
 
-    model_class = get_model_class(values)
+    model_class = _get_model_class(values)
 
     template = ko.ko(model_class, context=context, url=url)
 
@@ -39,13 +39,13 @@ def knockout(context, values, url=None):
 
 
 @register.simple_tag(takes_context=True)
-def knockout_view_model(context, values, url=None):
+def knockout_list_view_model(context, values, url=None):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_view_model tag requires an argument.")
 
-    model_class = get_model_class(values)
+    model_class = _get_model_class(values)
 
-    view_model = ko.ko_view_model(model_class, context=context, url=url)
+    view_model = ko.ko_list_view_model(model_class, context=context, url=url)
 
     return view_model
 
@@ -55,7 +55,7 @@ def knockout_bindings(context, values, element_id=None, url=None):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_model tag requires an argument.")
 
-    model_class = get_model_class(values)
+    model_class = _get_model_class(values)
 
     bindings = ko.ko_bindings(
         model_class, element_id=element_id, context=context, url=url
@@ -65,13 +65,13 @@ def knockout_bindings(context, values, element_id=None, url=None):
 
 
 @register.simple_tag(takes_context=True)
-def knockout_model(context, values, url=None):
+def knockout_view_model(context, values, url=None):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_model tag requires an argument.")
 
-    model_class = get_model_class(values)
+    model_class = _get_model_class(values)
 
-    ko_model = ko.ko_model(model_class, context=context, url=url)
+    ko_model = ko.ko_view_model(model_class, context=context, url=url)
 
     return ko_model
 
@@ -81,14 +81,14 @@ def knockout_list(values):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_list tag requires an argument.")
 
-    model_class = get_model_class(values)
+    model_class = _get_model_class(values)
 
     ko_list = ko.ko_list(model_class)
 
     return ko_list
 
 
-# Helper tag, renders data-bind attr
+# Helper tag, renders data-bind attr required by knockout
 @register.assignment_tag
 def data_bind(field):
     if not field:
