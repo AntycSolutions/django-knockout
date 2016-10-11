@@ -1,28 +1,14 @@
 
-var {{ model_object }};
-
 {% if ajax_data %}
     {% if jquery %}
-        var {{ model_data_var }} = $.getJSON(
-            "{{ url }}",
-            function(data) {
-                if ($.isArray(data)) {
-                    {{ model_object }} = (
-                        new {{ list_view_model_class }}()
-                    );
-
-                    var {{ model_list }}_observable_array = ko.mapping.fromJS(
-                        data
-                    );
-                    {{ model_object }}.{{ model_list }}(
-                        {{ model_list }}_observable_array()
-                    );
-                }
-                else {
-                    {{ model_object }} = new {{ view_model_class }}(data);
-                }
+        var {{ model_data_var }} = $.getJSON("{{ url }}").then(function(data) {
+            if ($.isArray(data)) {
+                return new {{ list_view_model_class }}(data);
             }
-        );
+            else {
+                return new {{ view_model_class }}(data);
+            }
+        });
     {% else %}
         var {{ model_data_var }} = new Promise(function(resolve, reject) {
             var xhr = new XMLHttpRequest();
@@ -32,21 +18,11 @@ var {{ model_object }};
                 if (this.status == 200) {
                     var data = JSON.parse(this.responseText);
                     if (Array.isArray(data)) {
-                        {{ model_object }} = (
-                            new {{ list_view_model_class }}()
-                        );
-
-                        var {{ model_list }}_observable_array = ko.mapping.fromJS(
-                            data
-                        );
-                        {{ model_object }}.{{ model_list }}(
-                            {{ model_list }}_observable_array()
-                        );
+                        resolve(new {{ list_view_model_class }}(data));
                     }
                     else {
-                        {{ model_object }} = new {{ view_model_class }}(data);
+                        resolve(new {{ view_model_class }}(data));
                     }
-                    resolve();
                 }
                 reject();
             };
@@ -56,27 +32,37 @@ var {{ model_object }};
     {% endif %}
 {% endif %}
 
-function ko_bind_{{ model_object }}() {
-    // console.log('ko_bind {{ model_object }} {{ element_id }}');
-    var element = document.getElementById("{{ element_id }}");
+function {{ bind_function }}() {
+    {% if element_id %}
+        var element_id = "{{ element_id }}";
+        var element = document.getElementById(element_id);
+    {% else %}
+        var element_id = "body";
+        var element = document.body;
+    {% endif %}
+
+    // console.log('{{ bind_function }}');
+
     var is_bound = !!ko.dataFor(element);
     if (is_bound) {
-        throw "Element '{{ element_id }}' is already bound!";
+        throw new Error(
+            "Element '" + element_id + "' is already bound! " +
+            "If you are binding multiple elements element_id is required " +
+            "on all knockout/knockout_bindings tags"
+        );
     }
 
     {% if ajax_data %}
-        {{ model_data_var }}.then(function() {
-            ko.applyBindings({{ model_object }}, element);
+        {{ model_data_var }}.done(function(view_model) {
+            ko.applyBindings(view_model, element);
         });
     {% else %}
-        {{ model_object }} = new {{ model_type }}();
-
-        ko.applyBindings({{ model_object }}, element);
+        ko.applyBindings(new {{ model_type }}(), element);
     {% endif %}
 }
 
 {% if ajax_options %}
-    {{ model_options_var }}.then(ko_bind_{{ model_object }});
+    {{ model_options_var }}.done({{ bind_function }});
 {% else %}
-    ko_bind_{{ model_object }}();
+    {{ bind_function }}();
 {% endif %}

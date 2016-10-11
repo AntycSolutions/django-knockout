@@ -27,7 +27,14 @@ def _get_model_class(values):
 
 # Accepts a QuerySet, list of objects, instance of a model, or a model class
 @register.simple_tag(takes_context=True)
-def knockout(context, values, url=None, disable_ajax_data=False, is_list=True):
+def knockout(
+    context,
+    values,
+    element_id=None,
+    url=None,
+    disable_ajax_data=False,
+    is_list=True
+):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout tag requires an argument.")
 
@@ -35,6 +42,7 @@ def knockout(context, values, url=None, disable_ajax_data=False, is_list=True):
 
     ko_string = ko.ko(
         model_class,
+        element_id=element_id,
         context=context,
         url=url,
         disable_ajax_data=disable_ajax_data,

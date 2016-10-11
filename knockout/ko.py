@@ -35,6 +35,11 @@ def _get_url(context, model_name):
     if settings.SETTINGS['disable_ajax_data']:
         return
 
+    if not context:
+        raise Exception(
+            'Please provide full context when not specifying an url'
+        )
+
     app_name = context['request'].resolver_match.app_name
     if not app_name:
         raise Exception('urls app_name is undefined')
@@ -117,14 +122,12 @@ def ko_bindings(
     model_data_var = l_model_name + '_data'
     view_model_class = model_name + "ViewModel"
     list_view_model_class = model_name + "ListViewModel"
-    model_object = l_model_name + '_object'
-    if element_id:
-        model_object = '{}_{}'.format(element_id, model_object)
-    else:
-        element_id = model_object
     model_type = list_view_model_class if is_list else view_model_class
+    bind_function = 'ko_bind'
+    if element_id:
+        bind_function += '_' + element_id
 
-    if '-' in element_id:
+    if element_id is not None and '-' in element_id:
         raise Exception(
             'element_id cannot contain dashes: it is both an '
             'element id and a javascript variable'
@@ -146,9 +149,9 @@ def ko_bindings(
             'model_data_var': model_data_var,
             'view_model_class': view_model_class,
             'list_view_model_class': list_view_model_class,
-            'model_object': model_object,
             'element_id': element_id,
             'model_type': model_type,
+            'bind_function': bind_function,
             'url': url,
             'is_list': is_list,
             'ajax_data': ajax_data,
@@ -162,6 +165,7 @@ def ko_bindings(
 
 def ko(
     model_class,
+    element_id=None,
     context=None,
     url=None,
     disable_ajax_data=False,
@@ -186,6 +190,7 @@ def ko(
 
     bindings_string = ko_bindings(
         model_class,
+        element_id=element_id,
         context=context,
         url=url,
         disable_ajax_data=disable_ajax_data,

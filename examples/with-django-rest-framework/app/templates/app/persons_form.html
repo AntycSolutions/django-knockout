@@ -27,7 +27,7 @@
 
     <p>Dynamic, this method is for fine grain manipulation of form template (can also use KnockoutModelForm and skip using the data_bind templatetag)</p>
 
-    <div id="person_object">
+    <div id="manual">
         <form method="POST">
             {% csrf_token %}
             {% for field in form %}
@@ -63,7 +63,7 @@
     </div>
 
     <script type="text/javascript">
-        {% knockout person_class disable_ajax_data=True is_list=False %}
+        {% knockout person_class element_id="manual" disable_ajax_data=True is_list=False %}
 
         {% knockout_bindings person_class element_id="automatic" disable_ajax_data=True is_list=False %}
     </script>

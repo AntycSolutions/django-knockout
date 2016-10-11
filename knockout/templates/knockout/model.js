@@ -38,7 +38,7 @@ var {{ view_model_class }} = function(data) {
     );
     if (no_data) {
         if (typeof {{ model_fields_var }} === 'undefined') {
-            throw (
+            throw new Error(
                 "{{ model_fields_var }} is undefined, " +
                 "please setup Django Rest Framework or define it " +
                 "yourself after the knockout templatetag."
