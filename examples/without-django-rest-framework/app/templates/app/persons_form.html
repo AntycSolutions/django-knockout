@@ -27,8 +27,8 @@
 
     <p>Dynamic, this method is for fine grain manipulation of form template (can also use KnockoutModelForm and skip using the data_bind templatetag)</p>
 
-    <div id="personviewmodel">
-        <form method="POST" data-bind="foreachInit: { data: persons, createElement: createPerson }">
+    <div id="personlistviewmodel">
+        <form method="POST" data-bind="foreachInit: { data: persons, createElement: createPersonViewModel }">
             {% csrf_token %}
             <div data-template></div>
             <div data-init>
@@ -55,7 +55,7 @@
     <p>Dynamic, default form rendering with KnockoutModelForm</p>
 
     <div id="automatic">
-        <form method="POST" data-bind="foreachInit: { data: persons, createElement: createPerson }">
+        <form method="POST" data-bind="foreachInit: { data: persons, createElement: createPersonViewModel }">
             {% csrf_token %}
             <div data-template></div>
             <div data-init>
