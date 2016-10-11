@@ -7,7 +7,8 @@
             url: "{{ url }}",
             type: 'OPTIONS',
             success: function(data) {
-                {{ model_fields_var }} = ko.mapping.fromJS(data.POST);
+                // console.log('OPTIONS', data);
+                {{ model_fields_var }} = data.POST;
             },
         });
     {% else %}

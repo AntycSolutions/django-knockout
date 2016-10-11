@@ -27,13 +27,19 @@ def _get_model_class(values):
 
 # Accepts a QuerySet, list of objects, instance of a model, or a model class
 @register.simple_tag(takes_context=True)
-def knockout(context, values, url=None):
+def knockout(context, values, url=None, disable_ajax_data=False, is_list=True):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout tag requires an argument.")
 
     model_class = _get_model_class(values)
 
-    ko_string = ko.ko(model_class, context=context, url=url)
+    ko_string = ko.ko(
+        model_class,
+        context=context,
+        url=url,
+        disable_ajax_data=disable_ajax_data,
+        is_list=is_list,
+    )
 
     return ko_string
 
@@ -53,14 +59,26 @@ def knockout_list_view_model(context, values, url=None):
 
 
 @register.simple_tag(takes_context=True)
-def knockout_bindings(context, values, element_id=None, url=None):
+def knockout_bindings(
+    context,
+    values,
+    element_id=None,
+    url=None,
+    disable_ajax_data=False,
+    is_list=True,
+):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_model tag requires an argument.")
 
     model_class = _get_model_class(values)
 
     bindings_string = ko.ko_bindings(
-        model_class, element_id=element_id, context=context, url=url
+        model_class,
+        element_id=element_id,
+        context=context,
+        url=url,
+        disable_ajax_data=disable_ajax_data,
+        is_list=is_list,
     )
 
     return bindings_string

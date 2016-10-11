@@ -99,7 +99,14 @@ def ko_list_view_model(model_class, context=None, url=None):
     return list_view_model_string
 
 
-def ko_bindings(model_class, element_id=None, context=None, url=None):
+def ko_bindings(
+    model_class,
+    element_id=None,
+    context=None,
+    url=None,
+    disable_ajax_data=False,
+    is_list=True,
+):
     if not inspect.isclass(model_class):
         raise Exception('ko_bindings function requires a class')
 
@@ -107,22 +114,44 @@ def ko_bindings(model_class, element_id=None, context=None, url=None):
     l_model_name = model_name.lower()
     model_list = l_model_name + "s"
     model_options_var = l_model_name + '_options'
+    model_data_var = l_model_name + '_data'
+    view_model_class = model_name + "ViewModel"
     list_view_model_class = model_name + "ListViewModel"
-    list_view_model_object = list_view_model_class.lower()
+    model_object = l_model_name + '_object'
+    if element_id:
+        model_object = '{}_{}'.format(element_id, model_object)
+    else:
+        element_id = model_object
+    model_type = list_view_model_class if is_list else view_model_class
+
+    if '-' in element_id:
+        raise Exception(
+            'element_id cannot contain dashes: it is both an '
+            'element id and a javascript variable'
+        )
 
     if not url:
         url = _get_url(context, model_name)
+
+    if not disable_ajax_data:
+        ajax_data = not settings.SETTINGS['disable_ajax_data']
+    else:
+        ajax_data = not disable_ajax_data
 
     bindings_string = render_to_string(
         "knockout/bindings.js",
         {
             'model_list': model_list,
             'model_options_var': model_options_var,
+            'model_data_var': model_data_var,
+            'view_model_class': view_model_class,
             'list_view_model_class': list_view_model_class,
-            'list_view_model_object': list_view_model_object,
+            'model_object': model_object,
             'element_id': element_id,
+            'model_type': model_type,
             'url': url,
-            'ajax_data': not settings.SETTINGS['disable_ajax_data'],
+            'is_list': is_list,
+            'ajax_data': ajax_data,
             'ajax_options': not settings.SETTINGS['disable_ajax_options'],
             'jquery': not settings.SETTINGS['disable_jquery'],
         }
@@ -131,15 +160,38 @@ def ko_bindings(model_class, element_id=None, context=None, url=None):
     return bindings_string
 
 
-def ko(model_class, context=None, url=None):
+def ko(
+    model_class,
+    context=None,
+    url=None,
+    disable_ajax_data=False,
+    is_list=True,
+):
     if not inspect.isclass(model_class):
         raise Exception('ko function requires a class')
 
-    list_view_model_string = ko_list_view_model(
-        model_class, context=context, url=url
-    )
-    bindings_string = ko_bindings(model_class, context=context, url=url)
+    model_string = None
+    if disable_ajax_data and not is_list:
+        view_model_string = ko_view_model(
+            model_class, context=context, url=url
+        )
 
-    ko_string = list_view_model_string + bindings_string
+        model_string = view_model_string
+    else:
+        list_view_model_string = ko_list_view_model(
+            model_class, context=context, url=url
+        )
+
+        model_string = list_view_model_string
+
+    bindings_string = ko_bindings(
+        model_class,
+        context=context,
+        url=url,
+        disable_ajax_data=disable_ajax_data,
+        is_list=is_list,
+    )
+
+    ko_string = model_string + bindings_string
 
     return ko_string
