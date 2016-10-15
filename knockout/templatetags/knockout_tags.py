@@ -1,7 +1,6 @@
-import inspect
-
 from django import template
-from django.db.models import query
+from django.db import models
+from django.db.models import query, base
 
 from knockout import ko, forms
 
@@ -16,11 +15,16 @@ def _get_model_class(values):
     elif isinstance(values, query.QuerySet):
         model = values.model
         model_class = model
-    elif inspect.isclass(values):
+    elif isinstance(values, base.ModelBase):
         model_class = values
-    else:
+    elif isinstance(values, models.Model):
         model = values
         model_class = model.__class__
+    else:
+        raise Exception(
+            "values must be a Queryset, list of objects, instance of model, "
+            "or a model's class"
+        )
 
     return model_class
 
