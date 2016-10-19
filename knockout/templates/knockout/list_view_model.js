@@ -6,5 +6,5 @@ var {{ list_view_model_class }} = function(data) {
 
     self.{{ model_list }} = ko.observableArray(data);
 
-	{{ list_string }}
+	{{ list_utils_string }}
 } // {{ list_view_model_class }}

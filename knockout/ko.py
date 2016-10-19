@@ -6,7 +6,7 @@ from django.core import urlresolvers
 from knockout import settings
 
 
-def ko_list(model_class):
+def ko_list_utils(model_class):
     if not inspect.isclass(model_class):
         raise Exception('ko_list function requires a class')
 
@@ -19,8 +19,8 @@ def ko_list(model_class):
     model_list = model_name.lower() + "s"
     view_model_class = model_name + 'ViewModel'
 
-    list_string = render_to_string(
-        "knockout/list.js",
+    list_utils_string = render_to_string(
+        "knockout/list_utils.js",
         {
             'comparator': comparator,
             'model_list': model_list,
@@ -28,7 +28,7 @@ def ko_list(model_class):
         }
     )
 
-    return list_string
+    return list_utils_string
 
 
 def _get_url(context, model_name):
@@ -82,7 +82,12 @@ def ko_view_model(model_class, context=None, url=None):
     return view_model_string
 
 
-def ko_list_view_model(model_class, context=None, url=None):
+def ko_list_view_model(
+    model_class,
+    context=None,
+    url=None,
+    include_list_utils=True
+):
     if not inspect.isclass(model_class):
         raise Exception('ko_view_model function requires a class')
 
@@ -90,7 +95,10 @@ def ko_list_view_model(model_class, context=None, url=None):
     model_list = model_name.lower() + 's'
     list_view_model_class = model_name + "ListViewModel"
 
-    list_string = ko_list(model_class)
+    list_utils_string = (
+        ko_list_utils(model_class) if include_list_utils else ''
+    )
+
     view_model_string = ko_view_model(model_class, context=context, url=url)
 
     list_view_model_string = render_to_string(
@@ -98,7 +106,7 @@ def ko_list_view_model(model_class, context=None, url=None):
         {
             'model_list': model_list,
             'list_view_model_class': list_view_model_class,
-            'list_string': list_string,
+            'list_utils_string': list_utils_string,
             'view_model_string': view_model_string,
         }
     )

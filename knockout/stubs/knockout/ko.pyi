@@ -7,7 +7,7 @@ import typing
 MB = typing.TypeVar('MB', bound=base.ModelBase)
 
 
-def ko_list(model_class: typing.Type[MB]) -> str:
+def ko_list_utils(model_class: typing.Type[MB]) -> str:
     ...
 
 
@@ -26,7 +26,8 @@ def ko_view_model(
 def ko_list_view_model(
     model_class: typing.Type[MB],
     context: typing.Optional[context.RequestContext]=None,
-    url: typing.Optional[str]=None
+    url: typing.Optional[str]=None,
+    include_list_utils: typing.Optiona[bool]=True,
 ) -> str:
     ...
 
