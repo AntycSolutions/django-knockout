@@ -115,6 +115,7 @@
 
         {# regular ko, data needs to be accessible by ajax or rendered into a js var #}
         {% knockout persons %}
+
         {# can be utilized with django rest framework to get all persons via ajax #}
         var persons = [
             {% for person in persons %}

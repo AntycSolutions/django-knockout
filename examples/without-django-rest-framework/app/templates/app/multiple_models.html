@@ -7,7 +7,9 @@
 {% block content %}
 
     <h1>Django</h1>
+
     <h2>Person</h2>
+
     <table>
         <thead>
             <tr>
@@ -26,7 +28,9 @@
             {% endfor %}
         </tbody>
     </table>
+
     <h2>Schedule</h2>
+
     <table>
         <thead>
             <tr>
@@ -49,7 +53,9 @@
             {% endfor %}
         </tbody>
     </table>
+
     <h2>Shopping</h2>
+
     <table>
         <thead>
             <tr>
@@ -83,8 +89,11 @@
             {% endfor %}
         </tbody>
     </table>
+
     <h1>Knockout</h1>
+
     <h2>Person</h2>
+
     <div id="personviewmodel">
         <table>
             <thead>
@@ -94,7 +103,7 @@
                     <th>Last Name</th>
                     <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Remove</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: persons">
@@ -104,19 +113,44 @@
                     <td><input data-bind="value: last_name" /></td>
                     <td><input data-bind="value: first_name" /></td>
                     <td><input data-bind="value: last_name" /></td>
-                    <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
+                    <td><button data-bind='click: $root.removePersonViewModel'>Remove a Person</button></td>
                 </tr>
             </tbody>
         </table>
         Count: <span data-bind='text: persons().length'></span>
-        <button data-bind='click: addPerson'>Add a Person</button>
-        <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
-        <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+        <button data-bind='click: addPersonViewModel'>Add a Person</button>
+        <button data-bind='click: sortPersonViewModelsAsc'>Sort Asc</button>
+        <button data-bind='click: sortPersonViewModelsDesc'>Sort Desc</button>
     </div>
-    <script>
-        {{ persons|knockout }}
+    <script type="text/javascript">
+        {# can be utilized with django rest framework OPTIONS method via knockout/metadata.py #}
+        {# required to create new persons #}
+        var person_fields = {
+            'id': null, 'first_name': null, 'last_name': null,
+        };
+
+        {# regular ko, data needs to be accessible by ajax or rendered into a js var #}
+        {% knockout persons element_id='personviewmodel' %}
+
+        {# can be utilized with django rest framework to get all persons via ajax #}
+        var persons = [
+            {% for person in persons %}
+                {
+                    id: "{{ person.id }}",
+                    first_name: "{{ person.first_name }}",
+                    last_name: "{{ person.last_name }}",
+                },
+            {% endfor %}
+        ];
+        var personviewmodel = ko.dataFor(
+            document.getElementById('personviewmodel')
+        );
+        persons_observable_array = ko.mapping.fromJS(persons);
+        personviewmodel.persons(persons_observable_array());
     </script>
+
     <h2>Schedule</h2>
+
     <div id="taskviewmodel">
         <table>
             <thead>
@@ -128,7 +162,7 @@
                     <th>Reminder Type</th>
                     <th>Task</th>
                     <th>Day</th>
-                    <th>Remove</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: tasks">
@@ -140,19 +174,63 @@
                     <td><input data-bind="value: reminder.reminder_type.reminder_type" /></td>
                     <td><input data-bind="value: task" /></td>
                     <td><input data-bind="value: day.day" /></td>
-                    <td><button data-bind='click: $root.removeTask'>Remove a Task</button></td>
+                    <td><button data-bind='click: $root.removeTaskViewModel'>Remove a Task</button></td>
                 </tr>
             </tbody>
         </table>
         Count: <span data-bind='text: tasks().length'></span>
-        <button data-bind='click: addTask'>Add a Task</button>
-        <button data-bind='click: sortTasksAsc'>Sort Asc</button>
-        <button data-bind='click: sortTasksDesc'>Sort Desc</button>
+        <button data-bind='click: addTaskViewModel'>Add a Task</button>
+        <button data-bind='click: sortTaskViewModelsAsc'>Sort Asc</button>
+        <button data-bind='click: sortTaskViewModelsDesc'>Sort Desc</button>
     </div>
-    <script>
-        {{ schedule|knockout }}
+    <script type="text/javascript">
+        {# can be utilized with django rest framework OPTIONS method via knockout/metadata.py #}
+        {# required to create new tasks #}
+        var task_fields = {
+            id: null,
+            task: null,
+            day: {
+                day: null,
+            },
+            reminder: {
+                reminder: null,
+                reminder_type: {
+                    reminder_type: null,
+                },
+            },
+        };
+
+        {# regular ko, data needs to be accessible by ajax or rendered into a js var #}
+        {% knockout schedule element_id='taskviewmodel' %}
+
+        {# can be utilized with django rest framework to get all persons via ajax #}
+        var tasks = [
+            {% for task in schedule %}
+                {
+                    id: '{{ task.id }}',
+                    task: '{{ task.task }}',
+                    day: {
+                        day: '{{ task.day.day }}',
+                    },
+                    reminder: {
+                        reminder: '{{ task.reminder.reminder }}',
+                        reminder_type: {
+                            reminder_type:
+                                '{{ task.reminder.reminder_type.reminder_type }}',
+                        },
+                    },
+                },
+            {% endfor %}
+        ];
+        var taskviewmodel = ko.dataFor(
+            document.getElementById('taskviewmodel')
+        );
+        tasks_observable_array = ko.mapping.fromJS(tasks);
+        taskviewmodel.tasks(tasks_observable_array());
     </script>
+
     <h2>Shopping</h2>
+
     <div id="shoppingviewmodel">
         <table>
             <thead>
@@ -161,7 +239,7 @@
                     <th>Name</th>
                     <th>Items</th>
                     <th>Name</th>
-                    <th>Remove</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: shoppings">
@@ -175,7 +253,7 @@
                                     <th>Item ID</th>
                                     <th>Item Name</th>
                                     <th>Description</th>
-                                    <th>Remove</th>
+                                    {# <th></th> #}
                                 </tr>
                             </thead>
                             <tbody data-bind="foreach: items">
@@ -183,27 +261,63 @@
                                     <td><input data-bind="value: id" /></td>
                                     <td><input data-bind="value: name" /></td>
                                     <td><input data-bind="value: description.description" /></td>
-                                    <td><button data-bind='click: $parent.removeItem'>Remove an Item</button></td>
+                                    {# <td><button data-bind='click: $parent.removeItemViewModel'>Remove an Item</button></td> #}
                                 </tr>
                             </tbody>
                         </table>
                         Count: <span data-bind='text: items().length'></span>
-                        <button data-bind='click: addItem'>Add an Item</button>
-                        <button data-bind='click: sortItemsAsc'>Sort Asc</button>
-                        <button data-bind='click: sortItemsDesc'>Sort Desc</button>
+                        {# <button data-bind='click: addItemViewModel'>Add an Item</button> #}
+                        {# <button data-bind='click: sortItemViewModelsAsc'>Sort Asc</button> #}
+                        {# <button data-bind='click: sortItemViewModelsDesc'>Sort Desc</button> #}
                     </td>
                     <td><input data-bind="value: name" /></td>
-                    <td><button data-bind='click: $root.removeShopping'>Remove a Shopping List</button></td>
+                    <td><button data-bind='click: $root.removeShoppingViewModel'>Remove a Shopping List</button></td>
                 </tr>
             </tbody>
         </table>
         Count: <span data-bind='text: shoppings().length'></span>
-        <button data-bind='click: addShopping'>Add a Shopping List</button>
-        <button data-bind='click: sortShoppingsAsc'>Sort Asc</button>
-        <button data-bind='click: sortShoppingsDesc'>Sort Desc</button>
+        <button data-bind='click: addShoppingViewModel'>Add a Shopping List</button>
+        <button data-bind='click: sortShoppingViewModelsAsc'>Sort Asc</button>
+        <button data-bind='click: sortShoppingViewModelsDesc'>Sort Desc</button>
     </div>
-    <script>
-        {{ shopping_lists|knockout }}
+    <script type="text/javascript">
+        {# can be utilized with django rest framework OPTIONS method via knockout/metadata.py #}
+        {# required to create new shopping lists #}
+        var shopping_fields = {
+            id: null,
+            name: null,
+            items: [], {# ### TODO: implement ManyToMany ### #}
+        };
+
+        {# regular ko, data needs to be accessible by ajax or rendered into a js var #}
+        {% knockout shopping_lists element_id='shoppingviewmodel' %}
+
+        {# can be utilized with django rest framework to get all persons via ajax #}
+        var shoppings = [
+            {% for shopping_list in shopping_lists %}
+                {
+                    id: '{{ shopping_list.id }}',
+                    name: '{{ shopping_list.name }}',
+                    items: [
+                        {% for item in shopping_list.items.all %}
+                            {
+                                id: '{{ item.id }}',
+                                name: '{{ item.name }}',
+                                description: {
+                                    description:
+                                        '{{ item.description.description }}',
+                                },
+                            },
+                        {% endfor %}
+                    ],
+                },
+            {% endfor %}
+        ];
+        var shoppingviewmodel = ko.dataFor(
+            document.getElementById('shoppingviewmodel')
+        );
+        var shoppings_observable_array = ko.mapping.fromJS(shoppings);
+        shoppingviewmodel.shoppings(shoppings_observable_array());
     </script>
 
 {% endblock content %}

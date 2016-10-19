@@ -85,6 +85,9 @@
                             </tbody>
                         </table>
                         Count: <span data-bind='text: items().length'></span>
+                        {# <button data-bind='click: addItemViewModel'>Add an Item</button> #}
+                        {# <button data-bind='click: sortItemViewModelsAsc'>Sort Asc</button> #}
+                        {# <button data-bind='click: sortItemViewModelsDesc'>Sort Desc</button> #}
                     </td>
                     <td><input data-bind="value: name" /></td>
                     <td><button data-bind='click: $root.removeShopping'>Remove a Shopping List</button></td>
@@ -107,6 +110,7 @@
             items: [], {# ### TODO: implement ManyToMany ### #}
         };
 
+        {# regular ko, data needs to be accessible by ajax or rendered into a js var #}
         {% knockout shopping_lists %}
 
         {# can be utilized with django rest framework to get all persons via ajax #}
