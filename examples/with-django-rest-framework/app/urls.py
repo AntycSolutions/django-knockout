@@ -12,6 +12,16 @@ router.register(
     api.PersonViewSet,
     'person'
 )
+router.register(
+    r'tasks',
+    api.TaskViewSet,
+    'task'
+)
+router.register(
+    r'shopping_lists',
+    api.ShoppingViewSet,
+    'shopping'
+)
 
 urlpatterns = [
     url(r'^$', views.Index.as_view(), name='app_index'),

@@ -1,0 +1,109 @@
+{% extends 'app/base.html' %}
+
+{% load knockout_tags %}
+
+{% block title %}Shopping List Objects (ManyToMany) - {% endblock %}
+
+{% block content %}
+
+    <h1>Django</h1>
+
+    <p>Static</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Items</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for shopping_list in shopping_lists %}
+            <tr>
+                <td>{{ shopping_list.id }}</td>
+                <td>{{ shopping_list.name }}</td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in shopping_list.items.all %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.name }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Django Knockout</h1>
+
+    <p>Dynamic</p>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Items</th>
+                    <th>Name (Duplicate)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: shoppings">
+                <tr>
+                    <td><input data-bind="value: id" /></td>
+                    <td><input data-bind='value: name, valueUpdate: "afterkeydown"' /></td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <!-- <th></th> -->
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: items">
+                                <tr>
+                                    <td><input data-bind="value: id" /></td>
+                                    <td><input data-bind="value: name" /></td>
+                                    <!-- ko if: description -->
+                                        <td><input data-bind="value: description.description" /></td>
+                                    <!-- /ko -->
+                                    <!-- ko ifnot: description -->
+                                        <td><input /></td>
+                                    <!-- /ko -->
+                                    <!-- <td><button data-bind='click: $parent.removeItem'>Remove an Item</button></td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                        Count: <span data-bind='text: items().length'></span>
+                    </td>
+                    <td><input data-bind="value: name" /></td>
+                    <td><button data-bind='click: $root.removeShoppingViewModel'>Remove a Shopping List</button></td>
+                </tr>
+            </tbody>
+        </table>
+        Count: <span data-bind='text: shoppings().length'></span>
+        <button data-bind='click: addShoppingViewModel'>Add a Shopping List</button>
+        <button data-bind='click: sortShoppingViewModelsAsc'>Sort Asc</button>
+        <button data-bind='click: sortShoppingViewModelsDesc'>Sort Desc</button>
+    </div>
+
+    <script type="text/javascript">
+        {% knockout shopping_lists %}
+    </script>
+
+{% endblock content %}
