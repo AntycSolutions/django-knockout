@@ -2,11 +2,13 @@
 {% if ajax_data %}
     {% if jquery %}
         var {{ model_data_var }} = $.getJSON("{{ url }}").then(function(data) {
+            {# map data and get the underlying array #}
+            var ko_data = ko.mapping.fromJS(data)();
             if ($.isArray(data)) {
-                return new {{ list_view_model_class }}(data);
+                return new {{ list_view_model_class }}(ko_data);
             }
             else {
-                return new {{ view_model_class }}(data);
+                return new {{ view_model_class }}(ko_data);
             }
         });
     {% else %}
@@ -17,11 +19,13 @@
             xhr.onload = function() {
                 if (this.status == 200) {
                     var data = JSON.parse(this.responseText);
+                    {# map data and get the underlying array #}
+                    var ko_data = ko.mapping.fromJS(data)();
                     if (Array.isArray(data)) {
-                        resolve(new {{ list_view_model_class }}(data));
+                        resolve(new {{ list_view_model_class }}(ko_data));
                     }
                     else {
-                        resolve(new {{ view_model_class }}(data));
+                        resolve(new {{ view_model_class }}(ko_data));
                     }
                 }
                 reject();
