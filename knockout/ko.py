@@ -66,7 +66,7 @@ def ko_view_model(model_class, context=None, url=None):
         url = _get_url(context, model_name)
 
     view_model_string = render_to_string(
-        "knockout/model.js",
+        "knockout/view_model.js",
         {
             'model_options_var': model_options_var,
             'model_fields_var': model_fields_var,
@@ -87,14 +87,16 @@ def ko_list_view_model(model_class, context=None, url=None):
         raise Exception('ko_view_model function requires a class')
 
     model_name = model_class.__name__
+    model_list = model_name.lower() + 's'
     list_view_model_class = model_name + "ListViewModel"
 
     list_string = ko_list(model_class)
     view_model_string = ko_view_model(model_class, context=context, url=url)
 
     list_view_model_string = render_to_string(
-        "knockout/view_model.js",
+        "knockout/list_view_model.js",
         {
+            'model_list': model_list,
             'list_view_model_class': list_view_model_class,
             'list_string': list_string,
             'view_model_string': view_model_string,

@@ -1,6 +1,4 @@
 
-    self.{{ model_list }} = ko.observableArray(data);
-
     self.add{{ view_model_class }} = function(data) {
         // console.log('add{{ view_model_class }}');
         self.{{ model_list }}.push(new {{ view_model_class }}(data));
