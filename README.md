@@ -181,8 +181,6 @@ First, import it!
 from knockout import ko
 ```
 
-// functions
-
 To get the whole template, you can do this:
 
 ```python
