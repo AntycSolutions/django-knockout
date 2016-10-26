@@ -5,7 +5,7 @@ django-knockout
 
 Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-modeler).
 
-# Table of Contents
+## Table of Contents
 * [Requirements](#requirements)
 * [Preview](#preview)
 * [Quick Start](#quick-start)
