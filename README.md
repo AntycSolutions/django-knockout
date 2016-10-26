@@ -78,6 +78,7 @@ With this!
 
 ```html+django
 {# template #}
+{% load knockout_tags %}
 {% knockout myobject_class %}
 ```
 
@@ -144,6 +145,13 @@ Simple Usage
 
 **django-knockout** can be used directly in templates to generate knockout view models. 
 
+First, import it!
+
+```html+django
+{# template #}
+{% load knockout_tags %}
+```
+
 To get just the list view model, if you prefer to load your data from API's, like this:
 
 ```html+django
@@ -205,29 +213,62 @@ list utils (see below for more information):
 ko_list_utils_string = ko.ko_list_utils(MyObject)
 ```
 
-Custom fieldsets are also allowed (see Access Control):
+Want to use Django forms to generate your knockout binds as well? Just use `KnockoutModelForm`:
+
+```python
+# forms.py
+from knockout import forms
+
+class MyObjectKnockoutModelForm(forms.KnockoutModelForm):
+    ...
+```
+
+```html+django
+{# template #}
+{% load knockout_tags %}
+{% knockout myobject_class disable_ajax_data=True is_list=False %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+```
+
+which outputs:
+
+```html
+<p>
+    <label for="id_my_number">My Number:</label>
+    <input data-bind="init, value: my_number" id="id_my_number" maxlength="64" name="my_number" type="text" value="..." />
+</p>
+<p>
+    <label for="id_my_name">My Name:</label>
+    <input data-bind="init, value: my_name" id="id_my_name" maxlength="64" name="my_name" type="text" value="..." />
+</p>
+```
+
+Custom fieldsets are also allowed at form level (see Access Control for model level):
 ```python
 from knockout import forms
 
-class MyObject():
+class MyObjectKnockoutModelForm(forms.KnockoutModelForm):
     ...
-    def knockout_fields(self):
-        return ['my_name', 'my_number', ...]
-
-myobject_knockout_model_form = MyObjectKnockoutModeLForm(forms.KnockoutModelForm)
-
-ko_string = ko(MyObject, knockout_model)
-// TODO, finish documentation for KnockoutModelForm
+    @staticmethod
+    def knockout_fields():
+        return ['id', 'my_name', 'my_number', ...]
 ```
 
 Access Control
 ---
 
 If you don't want to expose your entire model to Knockout, you can define a function in your model:
-// currently just forms, TODO: make knockout_fields work not just for forms
 ```python
-def knockout_fields(self):
-    return ['id', 'my_name', 'my_number', ...]
+class MyObject(models.Model):
+    ...
+    @staticmethod
+    def knockout_fields():
+        return ['id', 'my_name', 'my_number', ...]
 ```
 
 Sorting
@@ -290,7 +331,7 @@ self.sortMyObjectViewModelsDesc = function() {
 };
 ```
 
-Include this in your template:
+Include a variation of this in your template:
 
 ```html+django
 {# template #}
@@ -301,16 +342,19 @@ Include this in your template:
 By default, it will use the object's 'id' field, but you can also define your own comparator like so:
 
 ```python
-def comparator(self):
-    return 'my_name'  # or whichever field
+class MyObject(models.Model):
+    ...
+    @staticmethod
+    def knockout_comparator(self):
+        return 'my_name'  # or whichever field
 ```
 
-If you don't define a comparator, 'id' must be in your knockout_fields.
+If you don't define a comparator, 'id' must be available.
 
 Multi-Model Support
 ----------
 
-django-knockout is all ready set up to be used with multiple types of data at the same time, as bindings can happen to specific objects:
+django-knockout is all ready set up to be used with multiple types of data at the same time, as bindings can happen to specific objects via this generated function:
 
 ```javascript
 function ko_bind() {
@@ -337,11 +381,9 @@ and add the paramter to the `knockout` tag:
 
 ```html+django
 {# template #}
+{% load knockout_tags %}
 {% knockout myobject_class element_id="myobjectviewmodel" %}
 ```
-
-This is handy for prototyping, but more advanced applications may want to use the [Master View Model](http://stackoverflow.com/a/9294752/1135467) technique instead.
-// TODO: still relevant?
 
 Custom Data Support
 ---------
@@ -350,10 +392,12 @@ Is django-knockout using the wrong url? Pass it into `knockout`/`ko` or `knockou
 
 ```html+django
 {# template #}
+{% load knockout_tags %}
 {% url 'app:myobject-list' as myobject_list_url %}
 {% knockout myobject_class url=myobject_list_url %}
 ```
 
 ```python
-ko(MyObject, url='/app/api/myobjects')
+from knockout import ko
+ko.ko(MyObject, url='/app/api/myobjects')
 ```
