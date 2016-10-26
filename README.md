@@ -17,7 +17,6 @@ Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-mode
 * [Multi-Model Support](#multi-model-support)
 * [Custom Data Support](#custom-data-support)
 * [Advanced Usage](#advanced-usage)
-* [](#)
 
 ### Requirements
 * [Python](//python.org) 2.7 or 3.4+
@@ -194,7 +193,7 @@ If you'd like to output the list utils (see below for more information):
 {% knockout_list_utils myobject_class %}
 ```
 
-Progammatic Usage
+Programmatic Usage
 ---
 
 First, import it!
