@@ -5,6 +5,9 @@ django-knockout
 
 Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-modeler).
 
+# Table of Contents
+[Requirements](#requirements)
+
 ### Requirements
 * [Python](//python.org) 2.7 or 3.4+
 * [Django](//djangoproject.com) 1.8
