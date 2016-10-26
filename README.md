@@ -17,6 +17,7 @@ Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-mode
 * [Sorting](#sorting)
 * [Multi-Model Support](#multi-model-support)
 * [Custom Data Support](#custom-data-support)
+* [Settings](#settings)
 * [Advanced Usage](#advanced-usage)
     * [Knockout Functions](#knockout-functions)
     * [Knockout Tags](#knockout-tags)
@@ -433,6 +434,24 @@ Is django-knockout using the wrong url? Pass it into `knockout`/`ko` or `knockou
 from knockout import ko
 ko.ko(MyObject, url='/app/api/myobjects')
 ```
+
+Settings
+---
+
+The following settings are currently supported:
+
+```python
+# settings.py
+DJANGO_KNOCKOUT = {
+    'disable_jquery': False,  # default
+    'disable_ajax_data': False,  # default
+    'disable_ajax_options': False,  # default
+}
+```
+
+* Don't like jQuery (or don't want to include another library)? Set `disable_jquery` to True
+* Don't like how django-knockout fetches data? Set `disable_ajax_data` to True
+* Don't like how django-knockout fetches view model's fields? Set `disable_ajax_options` to True
 
 Advanced Usage
 ---
