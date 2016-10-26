@@ -8,6 +8,7 @@ Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-mode
 ### Table of Contents
 * [Requirements](#requirements)
 * [Preview](#preview)
+    * [Optional](#optional)
 * [Quick Start](#quick-start)
 * [Simple Usage](#simple-usage)
 * [Programmatic Usage](#programmatic-usage)
@@ -17,6 +18,8 @@ Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-mode
 * [Multi-Model Support](#multi-model-support)
 * [Custom Data Support](#custom-data-support)
 * [Advanced Usage](#advanced-usage)
+    * [Knockout Functions](#knockout-functions)
+    * [Knockout Tags](#knockout-tags)
 
 Requirements
 ---
@@ -24,7 +27,7 @@ Requirements
 * [Django](//djangoproject.com) 1.8
 * [Knockout](//knockoutjs.com) 3.3+
 
-Optional
+### Optional
 * [Knockout pre-rendered](//github.com/ErikSchierboom/knockout-pre-rendered) 0.5+
 * [Django Rest Framework](//django-rest-framework.org) 3.3+
 * [jQuery](//jquery.com) 2.1+
@@ -436,6 +439,8 @@ Advanced Usage
 
 Defaults not working out for you? Here's the parameters to template tags and ko functions:
 
+#### Knockout Functions
+
 ```python
 '''
     required:
@@ -528,4 +533,18 @@ def ko_view_model(
         model_class: The class of model you want to knockout
 '''
 def ko_list_utils(model_class)
+```
+
+#### Knockout Tags
+
+Knockout template tags `knockout`, `knockout_list_view_model`, `knockout_bindings`, `knockout_view_model`, `knockout_list_utils` match up with their Knockout function equivalent, except their first required arg `model_class` can be a list of models, a QuerySet, a model's class, or an instance of a model.
+
+```html+django
+{# template #}
+<!--
+    required:
+        field: a Django Model Form field
+        data_bind: variable to assign output to
+-->
+{% data_bind field as data_bind %}
 ```
