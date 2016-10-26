@@ -1,9 +1,16 @@
 from django import forms
 from django.forms import formsets, widgets
 
+from knockout import utils
 
-def render_data_bind_attr(field, field_name, click_checked=True):
+
+def render_data_bind_attr(
+    field, field_name, click_checked=True, exclude=False
+):
     attr = ""
+
+    if exclude:
+        return attr
 
     if field.value():
         attr += 'init, '
@@ -34,35 +41,26 @@ class KnockoutModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(KnockoutModelForm, self).__init__(*args, **kwargs)
 
-        if hasattr(self, 'knockout_field_names'):
-            knockout_field_names = self.knockout_field_names
-        else:
-            knockout_field_names = {}
-
-        if hasattr(self, 'knockout_exclude'):
-            knockout_exclude = self.knockout_exclude
-        else:
-            knockout_exclude = []
-
-        if hasattr(self, 'click_checked'):
-            click_checked = self.click_checked
-        else:
-            click_checked = True
+        # self (form) comes second, overrides model model
+        knockout_options = utils.get_knockout_options(self._meta.model, self)
 
         for field in self:
-            if field.name in knockout_exclude:
-                continue
-
-            if field.name in knockout_field_names:
-                field_name = knockout_field_names[field.name]
-            else:
-                field_name = field.name
-
-            attr = render_data_bind_attr(
-                field, field_name, click_checked=click_checked
+            exclude, field_name = utils.get_knockout_field_options(
+                field,
+                knockout_options['knockout_fields'],
+                knockout_options['knockout_exclude'],
+                knockout_options['knockout_field_names'],
             )
 
-            field.field.widget.attrs['data-bind'] = attr
+            attr = render_data_bind_attr(
+                field,
+                field_name,
+                click_checked=knockout_options['click_checked'],
+                exclude=exclude,
+            )
+
+            if attr:
+                field.field.widget.attrs['data-bind'] = attr
 
 
 class KnockoutBaseInlineFormSet(forms.BaseInlineFormSet):

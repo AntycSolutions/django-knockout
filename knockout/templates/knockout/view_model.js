@@ -22,7 +22,9 @@
                     {{ model_fields_var }} = ko.mapping.fromJS(data.POST);
                     resolve();
                 }
+                reject();
             };
+            xhr.onerror = reject;
             xhr.send();
         });
     {% endif %}
@@ -32,23 +34,48 @@ var {{ view_model_class }} = function(data) {
     // console.log('{{ view_model_class }}');
     var self = this;
 
+    if (typeof {{ model_fields_var }} === 'undefined') {
+        throw new Error(
+            "{{ model_fields_var }} is undefined, " +
+            "please setup Django Rest Framework or define it " +
+            "yourself after the knockout templatetag."
+        );
+    }
+
+    var fields = [
+        {% for field_name in knockout_options.knockout_fields %}
+            '{{ field_name }}',
+        {% endfor %}
+    ];
+    var ignore = [
+        {% for field_name in knockout_options.knockout_exclude %}
+            '{{ field_name }}',
+        {% endfor %}
+    ];
+    if (ignore.length && fields.length) {
+        throw new Error(
+            'Define knockout_exclude or knockout_fields, not both. ' +
+            'ignore: ' + ignore + ' ' +
+            'fields: ' + fields
+        );
+    }
+    for (var key in {{ model_fields_var }}) {
+        var not_in_fields = fields.indexOf(key) === -1;
+        if (not_in_fields) {
+            ignore.push(key);
+        }
+    }
+    var mapping = {'ignore': ignore};
+
     var no_data = (
         typeof data === 'undefined' ||
         data instanceof {{ list_view_model_class }}
     );
     if (no_data) {
-        if (typeof {{ model_fields_var }} === 'undefined') {
-            throw new Error(
-                "{{ model_fields_var }} is undefined, " +
-                "please setup Django Rest Framework or define it " +
-                "yourself after the knockout templatetag."
-            );
-        }
-
-        ko.mapping.fromJS({{ model_fields_var }}, {}, self);
+        ko.mapping.fromJS({{ model_fields_var }}, mapping, self);
     }
     else {
-        ko.mapping.fromJS(data, {}, self);
+        ko.mapping.fromJS(data, mapping, self);
     }
 
     self.form_prefix = ko.observable();

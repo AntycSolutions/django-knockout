@@ -3,12 +3,12 @@ import inspect
 from django.template.loader import render_to_string
 from django.core import urlresolvers
 
-from knockout import settings
+from knockout import settings, utils
 
 
 def ko_list_utils(model_class):
     if not inspect.isclass(model_class):
-        raise Exception('ko_list function requires a class')
+        raise Exception('ko_list_utils function requires a class')
 
     if hasattr(model_class, "comparator"):
         comparator = str(model_class.comparator())
@@ -51,7 +51,9 @@ def _get_url(context, model_name):
     return url
 
 
-def ko_view_model(model_class, context=None, url=None):
+def ko_view_model(
+    model_class, context=None, url=None, disable_ajax_options=False
+):
     if not inspect.isclass(model_class):
         raise Exception('ko_model function requires a class')
 
@@ -65,6 +67,13 @@ def ko_view_model(model_class, context=None, url=None):
     if not url:
         url = _get_url(context, model_name)
 
+    knockout_options = utils.get_knockout_options(model_class, None)
+
+    if not disable_ajax_options:
+        ajax_options = not settings.SETTINGS['disable_ajax_options']
+    else:
+        ajax_options = not disable_ajax_options
+
     view_model_string = render_to_string(
         "knockout/view_model.js",
         {
@@ -73,8 +82,8 @@ def ko_view_model(model_class, context=None, url=None):
             'view_model_class': view_model_class,
             'list_view_model_class': list_view_model_class,
             'url': url,
-            'ajax_data': not settings.SETTINGS['disable_ajax_data'],
-            'ajax_options': not settings.SETTINGS['disable_ajax_options'],
+            'knockout_options': knockout_options,
+            'ajax_options': ajax_options,
             'jquery': not settings.SETTINGS['disable_jquery'],
         }
     )
@@ -86,7 +95,8 @@ def ko_list_view_model(
     model_class,
     context=None,
     url=None,
-    include_list_utils=True
+    disable_ajax_options=False,
+    include_list_utils=True,
 ):
     if not inspect.isclass(model_class):
         raise Exception('ko_view_model function requires a class')
@@ -99,7 +109,12 @@ def ko_list_view_model(
         ko_list_utils(model_class) if include_list_utils else ''
     )
 
-    view_model_string = ko_view_model(model_class, context=context, url=url)
+    view_model_string = ko_view_model(
+        model_class,
+        context=context,
+        url=url,
+        disable_ajax_options=disable_ajax_options,
+    )
 
     list_view_model_string = render_to_string(
         "knockout/list_view_model.js",
@@ -120,6 +135,7 @@ def ko_bindings(
     context=None,
     url=None,
     disable_ajax_data=False,
+    disable_ajax_options=False,
     is_list=True,
 ):
     if not inspect.isclass(model_class):
@@ -146,10 +162,17 @@ def ko_bindings(
     if not url:
         url = _get_url(context, model_name)
 
+    knockout_options = utils.get_knockout_options(model_class, None)
+
     if not disable_ajax_data:
         ajax_data = not settings.SETTINGS['disable_ajax_data']
     else:
         ajax_data = not disable_ajax_data
+
+    if not disable_ajax_options:
+        ajax_options = not settings.SETTINGS['disable_ajax_options']
+    else:
+        ajax_options = not disable_ajax_options
 
     bindings_string = render_to_string(
         "knockout/bindings.js",
@@ -163,9 +186,10 @@ def ko_bindings(
             'model_type': model_type,
             'bind_function': bind_function,
             'url': url,
+            'knockout_options': knockout_options,
             'is_list': is_list,
             'ajax_data': ajax_data,
-            'ajax_options': not settings.SETTINGS['disable_ajax_options'],
+            'ajax_options': ajax_options,
             'jquery': not settings.SETTINGS['disable_jquery'],
         }
     )
@@ -179,6 +203,7 @@ def ko(
     context=None,
     url=None,
     disable_ajax_data=False,
+    disable_ajax_options=False,
     is_list=True,
 ):
     if not inspect.isclass(model_class):
@@ -187,13 +212,19 @@ def ko(
     model_string = None
     if disable_ajax_data and not is_list:
         view_model_string = ko_view_model(
-            model_class, context=context, url=url
+            model_class,
+            context=context,
+            url=url,
+            disable_ajax_options=disable_ajax_options,
         )
 
         model_string = view_model_string
     else:
         list_view_model_string = ko_list_view_model(
-            model_class, context=context, url=url
+            model_class,
+            context=context,
+            url=url,
+            disable_ajax_options=disable_ajax_options,
         )
 
         model_string = list_view_model_string
@@ -204,6 +235,7 @@ def ko(
         context=context,
         url=url,
         disable_ajax_data=disable_ajax_data,
+        disable_ajax_options=disable_ajax_options,
         is_list=is_list,
     )
 

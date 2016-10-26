@@ -2,7 +2,7 @@ from django import template
 from django.db import models
 from django.db.models import query, base
 
-from knockout import ko, forms
+from knockout import ko, forms, utils
 
 
 register = template.Library()
@@ -37,7 +37,8 @@ def knockout(
     element_id=None,
     url=None,
     disable_ajax_data=False,
-    is_list=True
+    disable_ajax_options=False,
+    is_list=True,
 ):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout tag requires an argument.")
@@ -50,6 +51,7 @@ def knockout(
         context=context,
         url=url,
         disable_ajax_data=disable_ajax_data,
+        disable_ajax_options=disable_ajax_options,
         is_list=is_list,
     )
 
@@ -57,14 +59,19 @@ def knockout(
 
 
 @register.simple_tag(takes_context=True)
-def knockout_list_view_model(context, values, url=None):
+def knockout_list_view_model(
+    context, values, url=None, disable_ajax_options=False
+):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_view_model tag requires an argument.")
 
     model_class = _get_model_class(values)
 
     list_view_model_string = ko.ko_list_view_model(
-        model_class, context=context, url=url
+        model_class,
+        context=context,
+        url=url,
+        disable_ajax_options=disable_ajax_options,
     )
 
     return list_view_model_string
@@ -77,6 +84,7 @@ def knockout_bindings(
     element_id=None,
     url=None,
     disable_ajax_data=False,
+    disable_ajax_options=False,
     is_list=True,
 ):
     if not values and not hasattr(values, 'model'):
@@ -90,6 +98,7 @@ def knockout_bindings(
         context=context,
         url=url,
         disable_ajax_data=disable_ajax_data,
+        disable_ajax_options=disable_ajax_options,
         is_list=is_list,
     )
 
@@ -97,27 +106,32 @@ def knockout_bindings(
 
 
 @register.simple_tag(takes_context=True)
-def knockout_view_model(context, values, url=None):
+def knockout_view_model(context, values, url=None, disable_ajax_options=False):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_model tag requires an argument.")
 
     model_class = _get_model_class(values)
 
-    view_model_string = ko.ko_view_model(model_class, context=context, url=url)
+    view_model_string = ko.ko_view_model(
+        model_class,
+        context=context,
+        url=url,
+        disable_ajax_options=disable_ajax_options,
+    )
 
     return view_model_string
 
 
 @register.simple_tag
-def knockout_list(values):
+def knockout_list_utils(values):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_list tag requires an argument.")
 
     model_class = _get_model_class(values)
 
-    list_string = ko.ko_list(model_class)
+    list_utils_string = ko.ko_list_utils(model_class)
 
-    return list_string
+    return list_utils_string
 
 
 # Helper tag, renders data-bind attr required by knockout
@@ -128,6 +142,23 @@ def data_bind(field):
 
     data_bind = "data-bind: "
 
-    attr = forms.render_data_bind_attr(field, field.name)
+    # form comes second, overrides model instance
+    knockout_options = utils.get_knockout_options(
+        field.form._meta.model, field.form
+    )
 
-    return data_bind + attr
+    exclude, field_name = utils.get_knockout_field_options(
+        field,
+        knockout_options['knockout_fields'],
+        knockout_options['knockout_exclude'],
+        knockout_options['knockout_field_names'],
+    )
+
+    attr = forms.render_data_bind_attr(
+        field,
+        field_name,
+        click_checked=knockout_options['click_checked'],
+        exclude=exclude,
+    )
+
+    return data_bind + attr if attr else ''

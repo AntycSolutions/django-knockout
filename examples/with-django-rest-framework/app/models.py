@@ -4,6 +4,11 @@ from django.db import models
 class Person(models.Model):
     first_name = models.CharField("First Name", max_length=64)
     last_name = models.CharField("Last Name", max_length=64)
+    ignored = models.IntegerField()
+
+    @staticmethod
+    def knockout_fields():
+        return ['id', 'first_name', 'last_name']
 
 
 class Day(models.Model):
