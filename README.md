@@ -189,10 +189,16 @@ First, import it!
 from knockout import ko
 ```
 
-To get the whole template, you can do this:
+To get the whole template (like the `knockout` tag), you can do this:
 
 ```python
 ko_string = ko.ko(MyObject)
+```
+
+Just the bindings
+
+```python
+ko_bindings_string = ko.ko_bindings(MyObject)
 ```
 
 Just the List View Model
@@ -213,7 +219,10 @@ list utils (see below for more information):
 ko_list_utils_string = ko.ko_list_utils(MyObject)
 ```
 
-Want to use Django forms to generate your knockout binds as well? Just use `KnockoutModelForm`:
+ModelForm Usage
+---
+
+Want to use Django forms to generate your html and knockout binds as well? Just use `KnockoutModelForm`:
 
 ```python
 # forms.py
@@ -221,7 +230,12 @@ from knockout import forms
 
 class MyObjectKnockoutModelForm(forms.KnockoutModelForm):
     ...
+    class Meta:
+        model = models.MyObject
+        fields = '__all__'
 ```
+
+Since Django forms output values we use Knockout pre-rendered to prevent double binding. This means we don't need django-knockout to get data via ajax.
 
 ```html+django
 {# template #}
@@ -386,7 +400,7 @@ and add the paramter to the `knockout` tag:
 ```
 
 Custom Data Support
----------
+---
 
 Is django-knockout using the wrong url? Pass it into `knockout`/`ko` or `knockout_bindings`/`ko_bindings`:
 
@@ -400,4 +414,103 @@ Is django-knockout using the wrong url? Pass it into `knockout`/`ko` or `knockou
 ```python
 from knockout import ko
 ko.ko(MyObject, url='/app/api/myobjects')
+```
+
+Advanced Usage
+---
+
+Defaults not working out for you? Here's the parameters to template tags and ko functions:
+
+```python
+'''
+    required:
+        model_class: The class of model you want to knockout
+        
+    optional:
+        element_id: The id of the element you want to bind your view model to
+        context: We need this to lookup urls requiring app_name, not required if your urls don't require app_name, or you've specified an url
+        url: The url to get ajax data/options from
+        disable_ajax_data: default False, if True, do not get ajax data
+        disable_ajax_options: default False, if True, do not get ajax options
+        is_list: Controls whether or not to output a List View Model (True, default) or just a View Model (False)
+'''
+def ko(
+    model_class,
+    element_id=None,
+    context=None,
+    url=None,
+    disable_ajax_data=False,
+    disable_ajax_options=False,
+    is_list=True,
+)
+```
+
+```python
+'''
+    required:
+        model_class: The class of model you want to knockout
+        
+    optional:
+        element_id: The id of the element you want to bind your view model to
+        context: We need this to lookup urls requiring app_name, not required if your urls don't require app_name, or you've specified an url
+        url: The url to get ajax data/options from
+        disable_ajax_data: default False, if True, do not get ajax data
+        disable_ajax_options: default False, if True, do not get ajax options
+        is_list: Controls whether or not to output a List View Model (True, default) or just a View Model (False)
+'''
+def ko_bindings(
+    model_class,
+    element_id=None,
+    context=None,
+    url=None,
+    disable_ajax_data=False,
+    disable_ajax_options=False,
+    is_list=True,
+)
+```
+
+```python
+'''
+    required:
+        model_class: The class of model you want to knockout
+        
+    optional:
+        context: We need this to lookup urls requiring app_name, not required if your urls don't require app_name, or you've specified an url
+        url: The url to get ajax data/options from
+        disable_ajax_options: default False, if True, do not get ajax options
+        include_list_utils: default True, if False, django-knockout will skip rendering js util functions
+'''
+def ko_list_view_model(
+    model_class,
+    context=None,
+    url=None,
+    disable_ajax_options=False,
+    include_list_utils=True,
+)
+```
+
+```python
+'''
+    required:
+        model_class: The class of model you want to knockout
+        
+    optional:
+        context: We need this to lookup urls requiring app_name, not required if your urls don't require app_name, or you've specified an url
+        url: The url to get ajax data/options from
+        disable_ajax_options: default False, if True, do not get ajax options
+'''
+def ko_view_model(
+    model_class,
+    context=None,
+    url=None,
+    disable_ajax_options=False,
+)
+```
+
+```python
+'''
+    required:
+        model_class: The class of model you want to knockout
+'''
+def ko_list_utils(model_class)
 ```
