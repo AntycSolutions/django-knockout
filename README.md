@@ -7,8 +7,8 @@ Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-mode
 
 ### Table of Contents
 * [Requirements](#requirements)
-* [Preview](#preview)
     * [Optional](#optional)
+* [Preview](#preview)
 * [Quick Start](#quick-start)
 * [Simple Usage](#simple-usage)
 * [Programmatic Usage](#programmatic-usage)
