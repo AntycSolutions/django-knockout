@@ -5,7 +5,7 @@ django-knockout
 
 Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-modeler).
 
-## Table of Contents
+### Table of Contents
 * [Requirements](#requirements)
 * [Preview](#preview)
 * [Quick Start](#quick-start)
@@ -18,7 +18,8 @@ Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-mode
 * [Custom Data Support](#custom-data-support)
 * [Advanced Usage](#advanced-usage)
 
-### Requirements
+Requirements
+---
 * [Python](//python.org) 2.7 or 3.4+
 * [Django](//djangoproject.com) 1.8
 * [Knockout](//knockoutjs.com) 3.3+
@@ -28,7 +29,8 @@ Optional
 * [Django Rest Framework](//django-rest-framework.org) 3.3+
 * [jQuery](//jquery.com) 2.1+
 
-### Preview
+Preview
+---
 **django-knockout** (with Django Rest Framework) turns this:
 
 ```python
@@ -299,7 +301,7 @@ class MyObject(models.Model):
 ```
 
 Sorting
-----------
+---
 
 django knockout provides some convenience methods (via `knockout_list_utils`/`ko_list_utils`) for manipulating your arrays:
 
@@ -379,7 +381,7 @@ class MyObject(models.Model):
 If you don't define a comparator, 'id' must be available.
 
 Multi-Model Support
-----------
+---
 
 django-knockout is all ready set up to be used with multiple types of data at the same time, as bindings can happen to specific objects via this generated function:
 
