@@ -1,4 +1,5 @@
 include README.md LICENSE
-recursive-include knockout *.py *.html
-recursive-include knockout/templates *
-recursive-include knockout/static *
+recursive-include knockout *.py
+recursive-include knockout/templates *.js
+recursive-include knockout/static *.js
+recursive-include knockout/stubs *.py *.pyi
