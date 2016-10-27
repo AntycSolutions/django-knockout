@@ -569,7 +569,7 @@ def ko_list_utils(model_class)
 
 #### Knockout Tags
 
-Knockout template tags `knockout`, `knockout_list_view_model`, `knockout_bindings`, `knockout_view_model`, `knockout_list_utils` match up with their Knockout function equivalent, except their first required arg `model_class` can be a list of models, a QuerySet, a model's class, or an instance of a model.
+Knockout template tags `knockout`, `knockout_list_view_model`, `knockout_bindings`, `knockout_view_model`, `knockout_list_utils` match up with their Knockout function equivalent, except their first required arg `model_class` can be a list of models, a QuerySet, a model's class, or an instance of a model. They also implicitly take in the context when called.
 
 ```html+django
 {# template #}
