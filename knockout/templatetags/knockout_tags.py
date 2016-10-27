@@ -36,8 +36,8 @@ def knockout(
     values,
     element_id=None,
     url=None,
-    disable_ajax_data=False,
-    disable_ajax_options=False,
+    disable_ajax_data=None,
+    disable_ajax_options=None,
     is_list=True,
 ):
     if not values and not hasattr(values, 'model'):
@@ -60,7 +60,7 @@ def knockout(
 
 @register.simple_tag(takes_context=True)
 def knockout_list_view_model(
-    context, values, url=None, disable_ajax_options=False
+    context, values, url=None, disable_ajax_options=None
 ):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_view_model tag requires an argument.")
@@ -83,8 +83,8 @@ def knockout_bindings(
     values,
     element_id=None,
     url=None,
-    disable_ajax_data=False,
-    disable_ajax_options=False,
+    disable_ajax_data=None,
+    disable_ajax_options=None,
     is_list=True,
 ):
     if not values and not hasattr(values, 'model'):
@@ -106,7 +106,7 @@ def knockout_bindings(
 
 
 @register.simple_tag(takes_context=True)
-def knockout_view_model(context, values, url=None, disable_ajax_options=False):
+def knockout_view_model(context, values, url=None, disable_ajax_options=None):
     if not values and not hasattr(values, 'model'):
         raise Exception("knockout_model tag requires an argument.")
 

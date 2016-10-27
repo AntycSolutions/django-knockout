@@ -10,8 +10,8 @@ def ko_list_utils(model_class):
     if not inspect.isclass(model_class):
         raise Exception('ko_list_utils function requires a class')
 
-    if hasattr(model_class, "comparator"):
-        comparator = str(model_class.comparator())
+    if hasattr(model_class, "knockout_comparator"):
+        comparator = str(model_class.knockout_comparator())
     else:
         comparator = 'id'
 
@@ -35,18 +35,33 @@ def _get_url(context, model_name):
     if settings.SETTINGS['disable_ajax_data']:
         return
 
-    if not context:
-        raise Exception(
-            'Please provide full context when not specifying an url'
-        )
+    l_model_name = model_name.lower()
 
-    app_name = context['request'].resolver_match.app_name
-    if not app_name:
-        raise Exception('urls app_name is undefined')
-    url_name = '{}:{}-list'.format(
-        context['request'].resolver_match.app_name, model_name.lower()
-    )
-    url = urlresolvers.reverse(url_name)
+    url_name = '{}-list'.format(l_model_name)
+    try:
+        url = urlresolvers.reverse(url_name)
+    except urlresolvers.NoReverseMatch:
+        if not context:
+            raise Exception(
+                'Please provide full context or pass an url to django-knockout'
+            )
+
+        app_name = context['request'].resolver_match.app_name
+        if not app_name:
+            raise Exception(
+                'Please define urls app_name or pass an url to django-knockout'
+            )
+        app_url_name = '{}:{}-list'.format(
+            context['request'].resolver_match.app_name, l_model_name
+        )
+        try:
+            url = urlresolvers.reverse(app_url_name)
+        except urlresolvers.NoReverseMatch:
+            raise Exception(
+                'Reverse for {} and Reverse for {} not found. '
+                'Please setup Django Rest Framework or '
+                'pass an url to django-knockout'.format(url_name, app_url_name)
+            )
 
     return url
 
@@ -64,15 +79,15 @@ def ko_view_model(
     view_model_class = model_name + 'ViewModel'
     list_view_model_class = model_name + 'ListViewModel'
 
-    if not url:
-        url = _get_url(context, model_name)
-
     knockout_options = utils.get_knockout_options(model_class, None)
 
-    if not disable_ajax_options:
+    if disable_ajax_options is None:
         ajax_options = not settings.SETTINGS['disable_ajax_options']
     else:
         ajax_options = not disable_ajax_options
+
+    if ajax_options and not url:
+        url = _get_url(context, model_name)
 
     view_model_string = render_to_string(
         "knockout/view_model.js",
@@ -95,7 +110,7 @@ def ko_list_view_model(
     model_class,
     context=None,
     url=None,
-    disable_ajax_options=False,
+    disable_ajax_options=None,
     include_list_utils=True,
 ):
     if not inspect.isclass(model_class):
@@ -134,8 +149,8 @@ def ko_bindings(
     element_id=None,
     context=None,
     url=None,
-    disable_ajax_data=False,
-    disable_ajax_options=False,
+    disable_ajax_data=None,
+    disable_ajax_options=None,
     is_list=True,
 ):
     if not inspect.isclass(model_class):
@@ -159,20 +174,20 @@ def ko_bindings(
             'element id and a javascript variable'
         )
 
-    if not url:
-        url = _get_url(context, model_name)
-
     knockout_options = utils.get_knockout_options(model_class, None)
 
-    if not disable_ajax_data:
+    if disable_ajax_data is None:
         ajax_data = not settings.SETTINGS['disable_ajax_data']
     else:
         ajax_data = not disable_ajax_data
 
-    if not disable_ajax_options:
+    if disable_ajax_options is None:
         ajax_options = not settings.SETTINGS['disable_ajax_options']
     else:
         ajax_options = not disable_ajax_options
+
+    if (ajax_options or ajax_data) and not url:
+        url = _get_url(context, model_name)
 
     bindings_string = render_to_string(
         "knockout/bindings.js",
@@ -202,8 +217,8 @@ def ko(
     element_id=None,
     context=None,
     url=None,
-    disable_ajax_data=False,
-    disable_ajax_options=False,
+    disable_ajax_data=None,
+    disable_ajax_options=None,
     is_list=True,
 ):
     if not inspect.isclass(model_class):

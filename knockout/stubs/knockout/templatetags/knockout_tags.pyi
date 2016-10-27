@@ -23,8 +23,8 @@ def knockout(
     ],
     element_id: typing.Optional[str]=None,
     url: typing.Optional[str]=None,
-    disable_ajax_data: typing.Optional[bool]=False,
-    disable_ajax_options: typing.Optional[bool]=False,
+    disable_ajax_data: typing.Optional[bool]=None,
+    disable_ajax_options: typing.Optional[bool]=None,
     is_list: typing.Optional[bool]=True,
 ) -> str:
     ...
@@ -36,7 +36,7 @@ def knockout_list_view_model(
         list, query.QuerySet, typing.Type[MB], typing.Type[M]
     ],
     url: typing.Optional[str]=None,
-    disable_ajax_options: typing.Optional[bool]=False,
+    disable_ajax_options: typing.Optional[bool]=None,
 ) -> str:
     ...
 
@@ -48,8 +48,8 @@ def knockout_bindings(
     ],
     element_id: typing.Optional[str]=None,
     url: typing.Optional[str]=None,
-    disable_ajax_data: typing.Optional[bool]=False,
-    disable_ajax_options: typing.Optional[bool]=False,
+    disable_ajax_data: typing.Optional[bool]=None,
+    disable_ajax_options: typing.Optional[bool]=None,
     is_list: typing.Optional[bool]=True,
 ) -> str:
     ...
@@ -61,7 +61,7 @@ def knockout_view_model(
         list, query.QuerySet, typing.Type[MB], typing.Type[M]
     ],
     url: typing.Optional[str]=None,
-    disable_ajax_options: typing.Optional[bool]=False,
+    disable_ajax_options: typing.Optional[bool]=None,
 ) -> str:
     ...
 

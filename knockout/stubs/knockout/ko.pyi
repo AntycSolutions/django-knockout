@@ -19,7 +19,7 @@ def ko_view_model(
     model_class: typing.Type[MB],
     context: typing.Optional[context.RequestContext]=None,
     url: typing.Optional[str]=None,
-    disable_ajax_options: typing.Optional[bool]=False,
+    disable_ajax_options: typing.Optional[bool]=None,
 ) -> str:
     ...
 
@@ -28,8 +28,8 @@ def ko_list_view_model(
     model_class: typing.Type[MB],
     context: typing.Optional[context.RequestContext]=None,
     url: typing.Optional[str]=None,
-    disable_ajax_options: typing.Optional[bool]=False,
-    include_list_utils: typing.Optiona[bool]=True,
+    disable_ajax_options: typing.Optional[bool]=None,
+    include_list_utils: typing.Optional[bool]=True,
 ) -> str:
     ...
 
@@ -39,8 +39,8 @@ def ko_bindings(
     element_id: typing.Optional[str]=None,
     context: typing.Optional[context.RequestContext]=None,
     url: typing.Optional[str]=None,
-    disable_ajax_data: typing.Optional[bool]=False,
-    disable_ajax_options: typing.Optional[bool]=False,
+    disable_ajax_data: typing.Optional[bool]=None,
+    disable_ajax_options: typing.Optional[bool]=None,
     is_list: typing.Optional[bool]=True,
 ) -> str:
     ...
@@ -51,8 +51,8 @@ def ko(
     element_id: typing.Optional[str]=None,
     context: typing.Optional[context.RequestContext]=None,
     url: typing.Optional[str]=None,
-    disable_ajax_data: typing.Optional[bool]=False,
-    disable_ajax_options: typing.Optional[bool]=False,
+    disable_ajax_data: typing.Optional[bool]=None,
+    disable_ajax_options: typing.Optional[bool]=None,
     is_list: typing.Optional[bool]=True,
 ) -> str:
     ...
