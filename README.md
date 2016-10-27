@@ -6,6 +6,7 @@ django-knockout
 Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-modeler).
 
 ### Table of Contents
+
 * [Requirements](#requirements)
     * [Optional](#optional)
 * [Preview](#preview)
@@ -24,17 +25,22 @@ Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-mode
 
 Requirements
 ---
+
+It's most likely that django-knockout works with older versions than the following, if it does, please let me know.
+
 * [Python](//python.org) 2.7 or 3.4+
 * [Django](//djangoproject.com) 1.8
 * [Knockout](//knockoutjs.com) 3.3+
 
 ### Optional
+
 * [Knockout pre-rendered](//github.com/ErikSchierboom/knockout-pre-rendered) 0.5+
 * [Django Rest Framework](//django-rest-framework.org) 3.3+
 * [jQuery](//jquery.com) 2.1+
 
 Preview
 ---
+
 **django-knockout** (with Django Rest Framework) turns this:
 
 ```python
@@ -282,6 +288,7 @@ which outputs:
 ```
 
 Custom fieldsets are also allowed at form level (see Access Control for model level):
+
 ```python
 from knockout import forms
 
