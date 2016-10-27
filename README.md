@@ -449,9 +449,9 @@ DJANGO_KNOCKOUT = {
 }
 ```
 
-* Don't like jQuery (or don't want to include another library)? Set `disable_jquery` to True
-* Don't like how django-knockout fetches data? Set `disable_ajax_data` to True
-* Don't like how django-knockout fetches view model's fields? Set `disable_ajax_options` to True
+* Don't like jQuery (or don't want to include another library)? Set `disable_jquery` to `True`
+* Don't like how django-knockout fetches data? Set `disable_ajax_data` to `True`
+* Don't like how django-knockout fetches view model's fields? Set `disable_ajax_options` to `True`
 
 Advanced Usage
 ---
@@ -469,8 +469,8 @@ Defaults not working out for you? Here's the parameters to template tags and ko 
         element_id: The id of the element you want to bind your view model to
         context: We need this to lookup urls requiring app_name, not required if your urls don't require app_name, or you've specified an url
         url: The url to get ajax data/options from
-        disable_ajax_data: default False, if True, do not get ajax data
-        disable_ajax_options: default False, if True, do not get ajax options
+        disable_ajax_data: If True, do not get ajax data (overrides disable_ajax_data setting), defaults to `disable_ajax_data` setting
+        disable_ajax_options: If True, do not get ajax options (overrides disable_ajax_options setting), defaults to `disable_ajax_options` setting
         is_list: Controls whether or not to output a List View Model (True, default) or just a View Model (False)
 '''
 def ko(
@@ -478,8 +478,8 @@ def ko(
     element_id=None,
     context=None,
     url=None,
-    disable_ajax_data=False,
-    disable_ajax_options=False,
+    disable_ajax_data=None,
+    disable_ajax_options=None,
     is_list=True,
 )
 ```
@@ -493,8 +493,8 @@ def ko(
         element_id: The id of the element you want to bind your view model to
         context: We need this to lookup urls requiring app_name, not required if your urls don't require app_name, or you've specified an url
         url: The url to get ajax data/options from
-        disable_ajax_data: default False, if True, do not get ajax data
-        disable_ajax_options: default False, if True, do not get ajax options
+        disable_ajax_data: If True, do not get ajax data (overrides disable_ajax_data setting), defaults to `disable_ajax_data` setting
+        disable_ajax_options: If True, do not get ajax options (overrides disable_ajax_options setting), defaults to `disable_ajax_options` setting
         is_list: Controls whether or not to output a List View Model (True, default) or just a View Model (False)
 '''
 def ko_bindings(
@@ -502,8 +502,8 @@ def ko_bindings(
     element_id=None,
     context=None,
     url=None,
-    disable_ajax_data=False,
-    disable_ajax_options=False,
+    disable_ajax_data=None,
+    disable_ajax_options=None,
     is_list=True,
 )
 ```
@@ -516,14 +516,14 @@ def ko_bindings(
     optional:
         context: We need this to lookup urls requiring app_name, not required if your urls don't require app_name, or you've specified an url
         url: The url to get ajax data/options from
-        disable_ajax_options: default False, if True, do not get ajax options
+        disable_ajax_options: If True, do not get ajax options (overrides disable_ajax_options setting), defaults to `disable_ajax_options` setting
         include_list_utils: default True, if False, django-knockout will skip rendering js util functions
 '''
 def ko_list_view_model(
     model_class,
     context=None,
     url=None,
-    disable_ajax_options=False,
+    disable_ajax_options=None,
     include_list_utils=True,
 )
 ```
@@ -536,13 +536,13 @@ def ko_list_view_model(
     optional:
         context: We need this to lookup urls requiring app_name, not required if your urls don't require app_name, or you've specified an url
         url: The url to get ajax data/options from
-        disable_ajax_options: default False, if True, do not get ajax options
+        disable_ajax_options: If True, do not get ajax options (overrides disable_ajax_options setting), defaults to `disable_ajax_options` setting
 '''
 def ko_view_model(
     model_class,
     context=None,
     url=None,
-    disable_ajax_options=False,
+    disable_ajax_options=None,
 )
 ```
 
