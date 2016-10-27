@@ -449,9 +449,22 @@ DJANGO_KNOCKOUT = {
 }
 ```
 
-* Don't like jQuery (or don't want to include another library)? Set `disable_jquery` to `True`
-* Don't like how django-knockout fetches data? Set `disable_ajax_data` to `True`
-* Don't like how django-knockout fetches view model's fields? Set `disable_ajax_options` to `True`
+* Don't like jQuery (or don't want to include another library)? Set `disable_jquery` to `True` and django-knockout will fallback to vanilla javascript `XMLHttpRequest`
+* Don't like how django-knockout fetches data? Set `disable_ajax_data` to `True` and provide your own data (after knockout tags)
+```javascript
+var vm = ko.dataFor(document.body); // or
+vm = ko.dataFor(document.getElementById(id)); // if you specified an element_id
+vm.myobjects(data);
+```
+* Don't like how django-knockout fetches view model's fields? Set `disable_ajax_options` to `True` and setup your fields manually (before knockout tags)
+```javascript
+myobject_fields = {
+    'my_number': null, // null required to become observable
+    'my_name': null,
+    'my_list': [], // [] required to become observableArray
+    ...
+}
+```
 
 Advanced Usage
 ---
