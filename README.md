@@ -26,7 +26,7 @@ Forked from [django-knockout-modeler](//github.com/Miserlou/django-knockout-mode
 Requirements
 ---
 
-It's most likely that django-knockout works with older versions than the following, if it does, please let me know.
+It's most likely that **django-knockout** works with older versions than the following, if it does, please let me know.
 
 * [Python](//python.org) 2.7 or 3.4+
 * [Django](//djangoproject.com) 1.8
@@ -537,7 +537,7 @@ def ko_bindings(
         context: We need this to lookup urls requiring app_name, not required if your urls don't require app_name, or you've specified an url
         url: The url to get ajax data/options from
         disable_ajax_options: If True, do not get ajax options (overrides disable_ajax_options setting), defaults to `disable_ajax_options` setting
-        include_list_utils: default True, if False, django-knockout will skip rendering js util functions
+        include_list_utils: default True, if False, **django-knockout** will skip rendering js util functions
 '''
 def ko_list_view_model(
     model_class,
