@@ -110,7 +110,7 @@ With this!
 Quick Start
 ---
 
-0. Install django-knockout 
+0. Install **django-knockout**
     via git (and then make sure the subfolder knockout is available to your PYTHONPATH)
     ```bash
     git clone github.com/AntycSolutions/django-knockout
@@ -260,7 +260,7 @@ class MyObjectKnockoutModelForm(forms.KnockoutModelForm):
         fields = '__all__'
 ```
 
-Since Django forms output values we use Knockout pre-rendered to prevent double binding. This means we don't need django-knockout to get data via ajax.
+Since Django forms output values we use Knockout pre-rendered to prevent double binding. This means we don't need **django-knockout** to get data via ajax.
 
 ```html+django
 {# template #}
@@ -394,7 +394,7 @@ If you don't define a comparator, 'id' must be available.
 Multi-Model Support
 ---
 
-django-knockout is all ready set up to be used with multiple types of data at the same time, as bindings can happen to specific objects via this generated function:
+**django-knockout** is all ready set up to be used with multiple types of data at the same time, as bindings can happen to specific objects via this generated function:
 
 ```javascript
 function ko_bind() {
@@ -428,7 +428,7 @@ and add the paramter to the `knockout` tag:
 Custom Data Support
 ---
 
-Is django-knockout using the wrong url? Pass it into `knockout`/`ko` or `knockout_bindings`/`ko_bindings`:
+Is **django-knockout** using the wrong url? Pass it into `knockout`/`ko` or `knockout_bindings`/`ko_bindings`:
 
 ```html+django
 {# template #}
@@ -456,14 +456,14 @@ DJANGO_KNOCKOUT = {
 }
 ```
 
-* Don't like jQuery (or don't want to include another library)? Set `disable_jquery` to `True` and django-knockout will fallback to vanilla javascript `XMLHttpRequest`
-* Don't like how django-knockout fetches data? Set `disable_ajax_data` to `True` and provide your own data (after knockout tags)
+* Don't like jQuery (or don't want to include another library)? Set `disable_jquery` to `True` and **django-knockout** will fallback to vanilla javascript `XMLHttpRequest`
+* Don't like how **django-knockout** fetches data? Set `disable_ajax_data` to `True` and provide your own data (after knockout tags)
 ```javascript
 var vm = ko.dataFor(document.body); // or
 vm = ko.dataFor(document.getElementById(id)); // if you specified an element_id
 vm.myobjects(data);
 ```
-* Don't like how django-knockout fetches view model's fields? Set `disable_ajax_options` to `True` and setup your fields manually (before knockout tags)
+* Don't like how **django-knockout** fetches view model's fields? Set `disable_ajax_options` to `True` and setup your fields manually (before knockout tags)
 ```javascript
 myobject_fields = {
     'my_number': null, // null required to become observable
@@ -537,7 +537,7 @@ def ko_bindings(
         context: We need this to lookup urls requiring app_name, not required if your urls don't require app_name, or you've specified an url
         url: The url to get ajax data/options from
         disable_ajax_options: If True, do not get ajax options (overrides disable_ajax_options setting), defaults to `disable_ajax_options` setting
-        include_list_utils: default True, if False, **django-knockout** will skip rendering js util functions
+        include_list_utils: default True, if False, django-knockout will skip rendering js util functions
 '''
 def ko_list_view_model(
     model_class,
