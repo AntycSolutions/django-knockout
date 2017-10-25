@@ -111,14 +111,15 @@ Quick Start
 ---
 
 0. Install **django-knockout**
-    via git (and then make sure the subfolder knockout is available to your PYTHONPATH)
+
+    via git
+    ```bash
+    pip install git+https://github.com/AntycSolutions/django-knockout
+    ```
+    or
     ```bash
     git clone github.com/AntycSolutions/django-knockout
-    ```
-    ~~via pip~~
-    // TODO (not currently on pip)
-    ```bash
-    pip install django-knockout
+    pip install ./django-knockout
     ```
 
 1. Add 'knockout' to your INSTALLED_APPS setting:
