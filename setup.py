@@ -11,9 +11,10 @@ os.chdir(path.normpath(path.join(path.abspath(__file__), os.pardir)))
 setuptools.setup(
     name='django-knockout',
     version='0.4.0',  # major.minor[.patch]
-    packages=['knockout'],
+    packages=setuptools.find_packages(),
     install_requires=['django'],
     include_package_data=True,
+    zip_safe=False,
     license='Apache',
     description='Generate knockout.js View Models from Django Models.',
     long_description=README,
