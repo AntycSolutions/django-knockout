@@ -58,9 +58,9 @@
         </table>
         <p>
             Count: <span data-bind='text: persons().length'></span>
-            <button data-bind='click: addPerson'>Add a Person</button>
-            <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
-            <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+            <button data-bind='click: addPersonViewModel'>Add a Person</button>
+            <button data-bind='click: sortPersonViewModelsAsc'>Sort Asc</button>
+            <button data-bind='click: sortPersonViewModelsDesc'>Sort Desc</button>
         </p>
     </div>
 
@@ -79,7 +79,7 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody data-bind="foreachInit: { data: persons, createElement: createPerson }">
+            <tbody data-bind="foreachInit: { data: persons, createElement: createPersonViewModel }">
                 <tr data-template>
                     <td><input data-bind="value: id"></td>
                     <td><input data-bind="value: first_name, valueUpdate: 'afterkeydown'"></td>
@@ -92,7 +92,7 @@
                     <td><input data-bind="init, value: id" value="{{ person.id }}"></td>
                     <td><input data-bind="init, value: first_name, valueUpdate: 'afterkeydown'" value="{{ person.first_name }}"></td>
                     <td><input data-bind="init, value: last_name" value="{{ person.last_name }}"></td>
-                    <td><input data-bind="value: first_name" /></td>
+                    <td><input data-bind="value: first_name"></td>
                     <td><button data-bind='click: $root.removePerson'>Remove a Person</button></td>
                 </tr>
                 {% endfor %}
@@ -100,9 +100,9 @@
         </table>
         <p>
             Count: <span data-bind='text: persons().length'></span>
-            <button data-bind='click: addPerson'>Add a Person</button>
-            <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
-            <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+            <button data-bind='click: addPersonViewModel'>Add a Person</button>
+            <button data-bind='click: sortPersonViewModelsAsc'>Sort Asc</button>
+            <button data-bind='click: sortPersonViewModelsDesc'>Sort Desc</button>
         </p>
     </div>
 
@@ -114,7 +114,7 @@
         };
 
         {# regular ko, data needs to be accessible by ajax or rendered into a js var #}
-        {% knockout persons %}
+        {% knockout persons element_id="personviewmodel" %}
 
         {# can be utilized with django rest framework to get all persons via ajax #}
         var persons = [

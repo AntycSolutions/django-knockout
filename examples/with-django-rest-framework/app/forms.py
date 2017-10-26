@@ -7,10 +7,12 @@ from app import models
 
 
 class PersonForm(knockout_forms.KnockoutModelForm):
-
     class Meta:
         model = models.Person
         fields = '__all__'
+        labels = {
+            'ignored': 'Ignored (No bindings)'
+        }
 
 
 class FormsetUpdateView(UpdateView):

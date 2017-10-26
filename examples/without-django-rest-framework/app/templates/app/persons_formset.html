@@ -14,7 +14,7 @@
             {% csrf_token %}
             {{ formset.management_form }}
             {{ formset.non_form_errors }}
-            <div data-bind="foreachInit: { data: persons, createElement: createPerson, afterQueueFlush: afterAddPerson }">
+            <div data-bind="foreachInit: { data: persons, createElement: createPersonViewModel, afterQueueFlush: afterAddPersonViewModel }">
                 <div data-template id="{{ formset.empty_form.prefix }}">
                     {% for field in formset.empty_form %}
                         {{ field.errors }}
@@ -45,9 +45,9 @@
             </div>
             <p>
                 Count: <span data-bind='text: persons().length'></span>
-                <button data-bind='click: addPerson'>Add a Person</button>
-                <button data-bind='click: sortPersonsAsc'>Sort Asc</button>
-                <button data-bind='click: sortPersonsDesc'>Sort Desc</button>
+                <button data-bind='click: addPersonViewModel'>Add a Person</button>
+                <button data-bind='click: sortPersonViewModelsAsc'>Sort Asc</button>
+                <button data-bind='click: sortPersonViewModelsDesc'>Sort Desc</button>
             </p>
             <p>
                 <button type="submit">Submit</button>

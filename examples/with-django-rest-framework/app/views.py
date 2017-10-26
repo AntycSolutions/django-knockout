@@ -46,6 +46,8 @@ class PersonsForm(UpdateView):
 
         context['knockout_form'] = forms.PersonForm(instance=self.object)
 
+        context['form'].fields['ignored'].label += ' (No bindings)'
+
         return context
 
     def get_success_url(self):
