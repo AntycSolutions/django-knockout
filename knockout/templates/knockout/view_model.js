@@ -59,10 +59,13 @@ var {{ view_model_class }} = function(data) {
             'fields: ' + fields
         );
     }
-    for (var key in {{ model_fields_var }}) {
-        var not_in_fields = fields.indexOf(key) === -1;
-        if (not_in_fields) {
-            ignore.push(key);
+    if (fields.length) {
+        // only include fields in knockout_fields
+        for (var key in {{ model_fields_var }}) {
+            var not_in_fields = fields.indexOf(key) === -1;
+            if (not_in_fields) {
+                ignore.push(key);
+            }
         }
     }
     var mapping = {'ignore': ignore};
